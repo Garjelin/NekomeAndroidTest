@@ -1,24 +1,23 @@
 [versions]
 aboutlibraries = "11.1.4"
 accompanist = "0.34.0"
-android-gradle-plugin = "8.2.2"
+android-gradle-plugin = "8.11.2"
 androidx-espresso = "3.5.1"
 androidx-glance = "1.0.0"
 androidx-hilt = "1.2.0"
 androidx-navigation = "2.7.7"
 androidx-room = "2.6.1"
 coil = "2.6.0"
-compose-compiler = "1.5.8"
 detekt = "1.23.5"
 hilt = "2.51.1"
-kotlin = "1.9.22"
+kotlin = "2.0.20"
 kotlin-coroutines = "1.8.0"
 mockk = "1.13.10"
 moshi = "1.15.1"
 okhttp3 = "4.12.0"
 retrofit = "2.9.0"
 
-sdk = "34"
+sdk = "35"
 
 [libraries]
 aboutlibraries-compose = { module = "com.mikepenz:aboutlibraries-compose", version.ref = "aboutlibraries" }
@@ -94,9 +93,10 @@ timber = { module = "com.jakewharton.timber:timber", version = "5.0.1" }
 aboutlibraries = { id = "com.mikepenz.aboutlibraries.plugin", version.ref = "aboutlibraries" }
 android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
 android-library = { id = "com.android.library", version.ref = "android-gradle-plugin" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 google-dagger-hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
-google-devtools-ksp = { id = "com.google.devtools.ksp", version = "1.9.22-1.0.17" }
+google-devtools-ksp = { id = "com.google.devtools.ksp", version = "2.0.20-1.0.25" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kover = { id = "org.jetbrains.kotlinx.kover", version = "0.7.6" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version = "11.6.1" }
