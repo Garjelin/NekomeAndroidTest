@@ -2,9 +2,12 @@ package com.chesire.nekome.tests
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextContains
+import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.chesire.nekome.app.login.credentials.ui.CredentialsTags
 import com.chesire.nekome.base.BaseComposeTest
 import com.chesire.nekome.pageobjects.loginScreen
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -23,6 +26,23 @@ import org.junit.runner.RunWith
 @HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
 class LoginFlowComposeTest : BaseComposeTest() {
+
+    /**
+     * Простой тест проверки текста кнопки Login.
+     */
+    @Test
+    fun loginButton_hasCorrectText() = run {
+        step("Открыть экран логина") {
+            launchActivity()
+        }
+
+        step("Проверить текст кнопки Login") {
+            composeTestRule
+                .onNodeWithTag(CredentialsTags.LoginButton)
+                .assertIsDisplayed()
+                .assertTextEquals("Logan", includeEditableText = false)
+        }
+    }
 
     /**
      * Тест успешного логина с использованием Page Object.
