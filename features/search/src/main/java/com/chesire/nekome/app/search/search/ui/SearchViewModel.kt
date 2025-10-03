@@ -1,0 +1,170 @@
+package com.chesire.nekome.app.search.search.ui
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.chesire.nekome.app.search.search.core.RememberSearchGroupUseCase
+import com.chesire.nekome.app.search.search.core.RetrieveUserSeriesIdsUseCase
+import com.chesire.nekome.app.search.search.core.SearchFailureReason
+import com.chesire.nekome.app.search.search.core.SearchInitializeUseCase
+import com.chesire.nekome.app.search.search.core.SearchSeriesUseCase
+import com.chesire.nekome.app.search.search.core.TrackSeriesUseCase
+import com.chesire.nekome.app.search.search.core.model.SearchGroup
+import com.chesire.nekome.resources.StringResource
+import com.github.michaelbull.result.onFailure
+import com.github.michaelbull.result.onSuccess
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+
+@HiltViewModel
+class SearchViewModel @Inject constructor(
+    searchInitialize: SearchInitializeUseCase,
+    private val retrieveUserSeriesIds: RetrieveUserSeriesIdsUseCase,
+    private val rememberSearchGroup: RememberSearchGroupUseCase,
+    private val searchSeries: SearchSeriesUseCase,
+    private val trackSeries: TrackSeriesUseCase,
+    private val mapper: DomainMapper
+) : ViewModel() {
+
+    private val _uiState = MutableStateFlow(UIState.Default)
+    val uiState = _uiState.asStateFlow()
+    private var state: UIState
+        get() = _uiState.value
+        set(value) {
+            _uiState.update { value }
+        }
+
+    init {
+        val initializeResult = searchInitialize()
+        state = state.copy(
+            searchGroup = initializeResult.initialGroup
+        )
+        viewModelScope.launch {
+            retrieveUserSeriesIds().collectLatest { userModelIds ->
+                val newModels = state.resultModels.map {
+                    it.copy(canTrack = !userModelIds.contains(it.id))
+                }
+                state = state.copy(resultModels = newModels)
+            }
+        }
+    }
+
+    fun execute(viewAction: ViewAction) {
+        when (viewAction) {
+            is ViewAction.SearchGroupChanged -> handleSearchGroupChanged(viewAction.newGroup)
+            is ViewAction.SearchTextUpdated -> handleSearchTextUpdated(viewAction.newSearchText)
+            ViewAction.ExecuteSearch -> handleExecuteSearch()
+            is ViewAction.TrackSeries -> handleTrackSeries(viewAction.model)
+            ViewAction.ErrorSnackbarObserved -> handleErrorSnackbarObserved()
+        }
+    }
+
+    private fun handleSearchGroupChanged(newGroup: SearchGroup) {
+        rememberSearchGroup(newGroup)
+        state = state.copy(searchGroup = newGroup)
+    }
+
+    private fun handleSearchTextUpdated(newText: String) {
+        state = state.copy(
+            searchText = newText,
+            isSearchTextError = false
+        )
+    }
+
+    private fun handleExecuteSearch() {
+        val searchCriteria = state.searchText
+
+        viewModelScope.launch {
+            state = state.copy(isSearching = true)
+
+            searchSeries(searchCriteria, state.searchGroup)
+                .onSuccess {
+                    state = state.copy(
+                        isSearching = false,
+                        resultModels = mapper.toResultModels(it, retrieveUserSeriesIds().first())
+                    )
+                }
+                .onFailure(::handleSearchFailure)
+        }
+    }
+
+    private fun handleSearchFailure(failureReason: SearchFailureReason) {
+        state = when (failureReason) {
+            SearchFailureReason.InvalidTitle -> state.copy(
+                isSearching = false,
+                isSearchTextError = true,
+                errorSnackbar = SnackbarData(StringResource.search_error_no_text)
+            )
+
+            SearchFailureReason.NetworkError -> state.copy(
+                isSearching = false,
+                errorSnackbar = SnackbarData(StringResource.error_generic)
+            )
+
+            SearchFailureReason.NoSeriesFound -> state.copy(
+                isSearching = false,
+                errorSnackbar = SnackbarData(StringResource.search_error_no_series_found)
+            )
+        }
+    }
+
+    private fun handleTrackSeries(model: ResultModel) {
+        viewModelScope.launch {
+            state = state.copy(
+                resultModels = updateModelsState(
+                    seriesId = model.id,
+                    isTracking = true
+                )
+            )
+
+            trackSeries(model.id, model.type)
+                .onSuccess {
+                    state = state.copy(
+                        resultModels = updateModelsState(
+                            seriesId = model.id,
+                            isTracking = false,
+                            canTrack = false
+                        )
+                    )
+                }
+                .onFailure {
+                    state = state.copy(
+                        resultModels = updateModelsState(
+                            seriesId = model.id,
+                            isTracking = false
+                        ),
+                        errorSnackbar = SnackbarData(
+                            StringResource.results_failure,
+                            model.title
+                        )
+                    )
+                }
+        }
+    }
+
+    private fun updateModelsState(
+        seriesId: Int,
+        isTracking: Boolean,
+        canTrack: Boolean? = null
+    ): List<ResultModel> {
+        return state.resultModels.map {
+            if (it.id == seriesId) {
+                it.copy(
+                    canTrack = canTrack ?: it.canTrack,
+                    isTracking = isTracking
+                )
+            } else {
+                it
+            }
+        }
+    }
+
+    private fun handleErrorSnackbarObserved() {
+        state = state.copy(errorSnackbar = null)
+    }
+}
