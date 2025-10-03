@@ -1,0 +1,2 @@
+* Add option to change displayed image quality
+* Fix potential crash occurring while app is in background
