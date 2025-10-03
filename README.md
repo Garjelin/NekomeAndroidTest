@@ -40,9 +40,114 @@ Nekome is an Android application that helps with tracking your anime and manga w
 * [Coil](https://github.com/coil-kt/coil) for async image loading
 * [Detekt](https://github.com/arturbosch/detekt) & [ktlint](https://github.com/pinterest/ktlint) are used for static analysis
 
+## Building from Source
+
+### Requirements
+- **Android Studio** Ladybug (2024.2.1) or newer
+- **JDK** 17 or newer
+- **Android SDK** with API 35
+- **Gradle** 8.11.1+ (included via wrapper)
+
+### Dependencies Versions
+- **Kotlin** 2.0.20
+- **Android Gradle Plugin** 8.11.2
+- **Compose** via Compose Compiler Plugin
+- **Min SDK** 21 (Android 5.0)
+- **Target SDK** 35 (Android 15)
+
+### Setup
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/Chesire/Nekome.git
+   cd Nekome
+   ```
+
+2. **Open in Android Studio:**
+   - Open Android Studio
+   - File → Open → Select project folder
+   - Wait for Gradle sync to complete
+
+3. **Build the project:**
+   ```bash
+   ./gradlew assembleDebug
+   ```
+
+4. **Run tests:**
+   ```bash
+   # Unit tests
+   ./gradlew test
+   
+   # UI tests (requires device/emulator)
+   ./gradlew connectedDebugAndroidTest
+   ```
+
+5. **Install on device:**
+   ```bash
+   ./gradlew installDebug
+   ```
+
+### Project Structure
+
+```
+nekome/
+├── app/                    # Main application module
+├── core/                   # Core modules
+│   ├── compose/           # Compose UI components
+│   ├── preferences/       # User preferences
+│   └── resources/         # Shared resources
+├── features/              # Feature modules
+│   ├── login/            # Login feature
+│   ├── search/           # Search feature
+│   ├── series/           # Series list feature
+│   ├── serieswidget/     # Home screen widget
+│   └── settings/         # Settings feature
+└── libraries/            # Internal libraries
+    ├── core/             # Core utilities
+    ├── database/         # Room database
+    ├── datasource/       # Data sources (auth, series, etc.)
+    └── kitsu/            # Kitsu API integration
+```
+
+### Code Quality
+
+```bash
+# Run static analysis
+./gradlew detekt
+
+# Run linting
+./gradlew ktlintCheck
+
+# Auto-format code
+./gradlew ktlintFormat
+```
+
+### Troubleshooting
+
+#### Layout Inspector not showing Compose UI?
+See [LAYOUT_INSPECTOR_FIX.md](LAYOUT_INSPECTOR_FIX.md) for detailed solution.
+
+#### Build errors after git pull?
+```bash
+./gradlew clean
+rm -rf .gradle/
+./gradlew build
+```
+
+#### Gradle version issues?
+```bash
+./gradlew wrapper --gradle-version 8.11.1
+```
+
 ## Contribution
 
 For contributing to the project, please feel free to [create an issue](https://github.com/Chesire/Nekome/issues/new) or submit a pull request.
+
+### Contribution Guidelines
+- Follow existing code style (Detekt + ktlint)
+- Write tests for new features
+- Update documentation if needed
+- Use conventional commits (feat:, fix:, chore:, etc.)
 
 ## License
 
