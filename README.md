@@ -122,11 +122,6 @@ nekome/
 ./gradlew ktlintFormat
 ```
 
-### Troubleshooting
-
-#### Layout Inspector not showing Compose UI?
-See [LAYOUT_INSPECTOR_FIX.md](LAYOUT_INSPECTOR_FIX.md) for detailed solution.
-
 #### Build errors after git pull?
 ```bash
 ./gradlew clean
