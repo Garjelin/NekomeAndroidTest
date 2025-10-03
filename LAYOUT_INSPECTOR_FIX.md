@@ -71,12 +71,40 @@ rm -rf build/
 
 После обновления AGP обязательно перезапустите Android Studio.
 
+## ⚠️ КРИТИЧЕСКАЯ ПРОБЛЕМА С COMPOSE - ИСПРАВЛЕНО!
+
+### Проблема: META-INF файлы исключались из APK
+
+В `app/build.gradle.kts` была строка:
+```kotlin
+resources.excludes.add("META-INF/*")  // ❌ НЕПРАВИЛЬНО!
+```
+
+Это **удаляло ВСЕ файлы META-INF**, включая критически важные для Layout Inspector:
+- `META-INF/androidx.compose.ui.version`
+- `META-INF/androidx.compose.runtime.version`
+
+**Без этих файлов Layout Inspector не может определить версию Compose и показывает пустое дерево!**
+
+### ✅ Решение применено:
+
+Теперь исключаются только конкретные проблемные файлы, а файлы версий Compose остаются:
+```kotlin
+packaging {
+    resources.excludes.add("META-INF/AL2.0")
+    resources.excludes.add("META-INF/LGPL2.1")
+    // ... другие конкретные файлы
+    // НЕ исключаем META-INF/androidx.compose.*.version!
+}
+```
+
 ## Для Layout Inspector с Jetpack Compose
 
 ### Требования для работы Layout Inspector:
 1. **API Level 29+** на устройстве/эмуляторе
 2. **Android Studio Iguana (2023.2.1) или новее**
 3. Приложение запущено в **режиме Debug**
+4. **META-INF/androidx.compose.*.version файлы НЕ исключены** ← ВАЖНО!
 
 ### Включить Live Updates:
 1. View → Tool Windows → Layout Inspector
