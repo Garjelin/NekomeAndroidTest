@@ -1,83 +1,23 @@
 package com.chesire.nekome.tests
 
-import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.assertTextContains
-import androidx.compose.ui.test.assertTextEquals
-import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.chesire.nekome.base.BaseComposeTest
+import com.chesire.nekome.helpers.Users.DEFAULT_USER
+import com.chesire.nekome.helpers.scenario.Login
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Test
 import org.junit.runner.RunWith
 
-/**
- * Пример UI теста с использованием Kaspresso + Kakao Compose.
- * 
- * Этот тест демонстрирует:
- * - Использование BaseComposeTest
- * - Page Object паттерн
- * - DSL для работы с экранами
- * - Kaspresso возможности (run, step, flakySafely)
- */
 @HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
 class LoginFlowComposeTest : BaseComposeTest() {
 
-    /**
-     * Простой тест проверки текста кнопки Login и поля Email.
-     */
     @Test
-    fun loginButton_hasCorrectText() = run {
-        step("Открыть экран логина") {
-            launchActivity()
-        }
-
-        step("Проверить поле Email, кликнуть и ввести текст") {
-            LoginScreen {
-                usernameField {
-                    flakySafely(10_000) {
-                        assertIsDisplayed()
-                        assertTextEquals("Kitsu email", includeEditableText = false)
-                    }
-                    performClick()
-                    performTextInput("testprofdepo@gmail.com")
-                }
-                passwordField {
-                    flakySafely(10_000) {
-                        assertIsDisplayed()
-                        assertTextEquals("Password", includeEditableText = false)
-                    }
-                    performClick()
-                    performTextInput("Qwerty123")
-                }
-            }
-        }
-        step("Проверить текст кнопки Login и нажать") {
-            LoginScreen {
-                loginButton {
-                    flakySafely(10_000) {
-                        assertIsDisplayed()
-                        assertTextEquals("Login", includeEditableText = false)
-                        assertIsEnabled()
-                    }
-                    performClick()
-                }
-            }
-        }
+    fun successfulLogin_withScenario() = run {
+        scenario(Login(DEFAULT_USER, composeTestRule))
         waitForTime(1000000)
     }
 
-    /**
-     * Тест успешного логина с использованием Page Object.
-     * 
-     * Структура:
-     * 1. Открыть экран логина
-     * 2. Ввести username
-     * 3. Ввести password
-     * 4. Нажать кнопку логина
-     * 5. Проверить переход на главный экран
-     */
     @Test
     fun successfulLogin_withPageObject() = run {
         // Шаг 1: Открываем экран логина
