@@ -155,6 +155,11 @@ class CollectionScreenTest : BaseComposeTest() {
                             assertExists()
                         }
                     }
+                    plusOneButton {
+                        flakySafely(10_000) {
+                            assertIsDisplayed()
+                        }
+                    }
 //                    waitForTime(1000000)
                     // Проверка постера
                     poster {

@@ -275,8 +275,8 @@ private fun SeriesCollection(
                     key = { _, item -> item.userId }
                 ) { index, item ->
                     SeriesItem(
-                        model = item,
                         index = index,
+                        model = item,
                         onSelectSeries = onSelectSeries,
                         onIncrementSeries = onIncrementSeries
                     )
@@ -306,8 +306,8 @@ private fun SeriesCollection(
 
 @Composable
 private fun SeriesItem(
-    model: Series,
     index: Int,
+    model: Series,
     onSelectSeries: (Series) -> Unit,
     onIncrementSeries: (Series) -> Unit
 ) {
@@ -339,11 +339,12 @@ private fun SeriesItem(
                     model = model.posterImageUrl,
                     placeholder = rememberVectorPainter(image = Icons.Default.InsertPhoto),
                     error = rememberVectorPainter(image = Icons.Default.BrokenImage),
-                    contentDescription = null,
+                    contentDescription = stringResource(id = StringResource.series_list_poster),
                     modifier = Modifier
                         .fillMaxHeight()
                         .aspectRatio(0.7f)
-                        .align(Alignment.CenterVertically),
+                        .align(Alignment.CenterVertically)
+                        .semantics { testTag = SeriesCollectionTags.Poster },
                     contentScale = ContentScale.FillBounds
                 )
                 Column(
@@ -403,7 +404,8 @@ private fun SeriesItem(
                                     contentDescription = stringResource(
                                         id = StringResource.series_list_plus_one
                                     ),
-                                    tint = MaterialTheme.colorScheme.primary
+                                    tint = MaterialTheme.colorScheme.primary,
+                                    modifier = Modifier.semantics { testTag = SeriesCollectionTags.PlusOneIcon }
                                 )
                             }
                         }
@@ -552,7 +554,9 @@ object SeriesCollectionTags {
     const val SearchFab = "SeriesCollectionSearchFab"
     const val SearchFabTitle = "SeriesCollectionSearchFabTitle"
     const val SeriesItem = "SeriesCollectionSeriesItem"
+    const val Poster = "SeriesCollectionPoster"
     const val PlusOne = "SeriesCollectionPlusOne"
+    const val PlusOneIcon = "SeriesCollectionPlusOneIcon"
     const val Snackbar = "SeriesCollectionSnackbar"
     const val AppBarTitle = "SeriesCollectionAppBarTitle"
     const val MenuFilter = "SeriesCollectionMenuFilter"
