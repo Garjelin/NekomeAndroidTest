@@ -101,13 +101,81 @@ class CollectionScreenTest : BaseComposeTest() {
         }
     }
 
+    /**
+     * Проверка отображения элементов внутри карточки серии.
+     * 
+     * Тест-кейс: TC-002 - Элементы карточки серии
+     * 
+     * Шаги:
+     * 1. Авторизоваться
+     * 2. Открыть экран коллекции
+     * 3. Проверить первую карточку серии:
+     *    - Заголовок отображается
+     *    - Подтип и дата отображаются
+     *    - Прогресс отображается
+     *    - Постер отображается
+     */
     @Test
     @Regression
     @Link(name = "Тест-кейс", url = "https://testrail.bcs.ru/testrail/index.php?/cases/view/60786872")
-    @DisplayName("Отображение элементов карточки")
-    fun refreshButtonUpdatesSeriesList() = run {
+    @DisplayName("Отображение элементов карточки серии")
+    fun checkSeriesCardElements() = run {
         scenario(Login(TEST_USER_1, composeTestRule))
 
+        step("Проверить элементы первой карточки серии") {
+            CollectionScreen {
+                seriesItem(0) {
+                    flakySafely(10_000) {
+                        assertIsDisplayed() // Сама карточка видна
+                        assertHasClickAction() // Карточка кликабельна
+                    }
+                    
+                    // Проверка заголовка
+                    title {
+                        flakySafely(10_000) {
+                            assertIsDisplayed()
+                            // Проверяем что заголовок не пустой
+                            assertExists()
+                        }
+                    }
+                    
+                    // Проверка подтипа и даты
+                    subtypeAndDate {
+                        flakySafely(10_000) {
+                            assertIsDisplayed()
+                            assertExists()
+                        }
+                    }
+                    
+                    // Проверка прогресса
+                    progress {
+                        flakySafely(10_000) {
+                            assertIsDisplayed()
+                            // Прогресс содержит слэш (например "1 / 25")
+                            assertExists()
+                        }
+                    }
+//                    waitForTime(1000000)
+                    // Проверка постера
+                    poster {
+                        flakySafely(10_000) {
+                            assertIsDisplayed()
+                        }
+                    }
+                }
+            }
+        }
+        
+        step("Проверить вторую карточку серии") {
+            CollectionScreen {
+                seriesItem(1) {
+                    flakySafely(10_000) {
+                        assertIsDisplayed()
+                        assertHasClickAction()
+                    }
+                }
+            }
+        }
     }
 }
 

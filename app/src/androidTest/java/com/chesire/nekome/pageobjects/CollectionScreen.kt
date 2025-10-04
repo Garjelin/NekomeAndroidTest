@@ -4,6 +4,7 @@ import androidx.compose.ui.test.SemanticsNodeInteractionsProvider
 import com.chesire.nekome.app.series.collection.ui.SeriesCollectionTags
 import com.chesire.nekome.base.BaseComposeScreen
 import com.chesire.nekome.helpers.kNodes.KExtendedFabNode
+import com.chesire.nekome.helpers.kNodes.KSeriesItemNode
 import io.github.kakaocup.compose.node.element.KNode
 
 /**
@@ -35,7 +36,11 @@ class CollectionScreen(semanticsProvider: SemanticsNodeInteractionsProvider) :
     val refreshButton: KNode = createNode(SeriesCollectionTags.MenuRefresh)
 
     fun searchFab(block: KExtendedFabNode.() -> Unit = {}): KExtendedFabNode {
-        return createNodeByTestTag(SeriesCollectionTags.SearchFab, block)
+        return createNodeByTestTag(
+            testTag = SeriesCollectionTags.SearchFab,
+            position = 0,
+            block = block
+        )
     }
 
     // Контейнер со списком серий
@@ -48,11 +53,25 @@ class CollectionScreen(semanticsProvider: SemanticsNodeInteractionsProvider) :
     val snackbar: KNode = createNode(SeriesCollectionTags.Snackbar)
 
     /**
-     * Получить карточку серии по индексу.
-     * Используется для проверки отдельных карточек.
+     * Получить карточку серии по индексу (с индексации 0).
+     * Используется для проверки элементов внутри карточки.
+     * 
+     * Пример использования:
+     * ```kotlin
+     * seriesItem(0) {
+     *     assertIsDisplayed()
+     *     title { assertTextContains("Attack on Titan") }
+     *     progress { assertTextEquals("1 / 25") }
+     *     plusOneButton { performClick() }
+     * }
+     * ```
      */
-    fun seriesItemAt(index: Int): KNode {
-        return createNode("${SeriesCollectionTags.SeriesItem}_$index")
+    fun seriesItem(index: Int = 0, block: KSeriesItemNode.() -> Unit = {}): KSeriesItemNode {
+        return createNodeByTestTag(
+            testTag = "${SeriesCollectionTags.SeriesItem}_$index",
+            position = 0,
+            block = block
+        )
     }
 }
 
