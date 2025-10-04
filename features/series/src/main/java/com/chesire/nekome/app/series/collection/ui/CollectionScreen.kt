@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
@@ -269,12 +270,13 @@ private fun SeriesCollection(
                 ),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                items(
+                itemsIndexed(
                     items = models,
-                    key = { it.userId }
-                ) {
+                    key = { _, item -> item.userId }
+                ) { index, item ->
                     SeriesItem(
-                        model = it,
+                        model = item,
+                        index = index,
                         onSelectSeries = onSelectSeries,
                         onIncrementSeries = onIncrementSeries
                     )
@@ -305,6 +307,7 @@ private fun SeriesCollection(
 @Composable
 private fun SeriesItem(
     model: Series,
+    index: Int,
     onSelectSeries: (Series) -> Unit,
     onIncrementSeries: (Series) -> Unit
 ) {
@@ -321,7 +324,7 @@ private fun SeriesItem(
         modifier = Modifier
             .fillMaxWidth()
             .height(125.dp)
-            .semantics { testTag = SeriesCollectionTags.SeriesItem }
+            .semantics { testTag = "${SeriesCollectionTags.SeriesItem}_$index" }
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             if (model.isUpdating) {
