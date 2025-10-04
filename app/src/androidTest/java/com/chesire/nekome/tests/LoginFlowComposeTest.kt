@@ -25,12 +25,25 @@ import org.junit.runner.RunWith
 class LoginFlowComposeTest : BaseComposeTest() {
 
     /**
-     * Простой тест проверки текста кнопки Login.
+     * Простой тест проверки текста кнопки Login и поля Email.
      */
     @Test
     fun loginButton_hasCorrectText() = run {
         step("Открыть экран логина") {
             launchActivity()
+        }
+
+        step("Проверить поле Email и кликнуть на него") {
+            LoginScreen {
+                usernameField {
+                    flakySafely(10_000) {
+                        assertIsDisplayed()
+                        // Проверяем, что label содержит текст "Kitsu email"
+                        assertTextContains("Kitsu email", substring = true, ignoreCase = false)
+                    }
+                    performClick()
+                }
+            }
         }
 
         step("Проверить текст кнопки Login") {
