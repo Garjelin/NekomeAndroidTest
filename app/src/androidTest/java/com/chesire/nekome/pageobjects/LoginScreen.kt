@@ -28,7 +28,7 @@ class LoginScreen(semanticsProvider: SemanticsNodeInteractionsProvider) :
     // Элементы экрана (используйте реальные testTags из вашего UI)
     val usernameField: KNode = createNode("UsernameField")
     val passwordField: KNode = createNode("PasswordField")
-    val loginButton: KNode = createNode("LoginButton")
+    val loginButton: KNode = createNode("CredentialsLoginButton")
     val forgotPasswordButton: KNode = createNode("ForgotPasswordButton")
     val signUpButton: KNode = createNode("SignUpButton")
     val errorMessage: KNode = createNode("ErrorMessage")

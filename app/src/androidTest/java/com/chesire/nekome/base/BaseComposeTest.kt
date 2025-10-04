@@ -4,6 +4,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.printToLog
 import androidx.test.core.app.ActivityScenario
+import com.chesire.nekome.pageobjects.LoginScreen
 import com.chesire.nekome.ui.MainActivity
 import com.kaspersky.kaspresso.kaspresso.Kaspresso
 import com.kaspersky.kaspresso.testcases.api.testcase.TestCase
@@ -53,6 +54,21 @@ abstract class BaseComposeTest : TestCase(
      */
     @get:Rule(order = 1)
     val composeTestRule = createComposeRule()
+
+    /**
+     * Page Object для экрана логина.
+     * Использование в DSL стиле:
+     * ```
+     * LoginScreen {
+     *     loginButton {
+     *         flakySafely {
+     *             assertIsDisplayed()
+     *         }
+     *     }
+     * }
+     * ```
+     */
+    protected val LoginScreen: LoginScreen by lazy { LoginScreen(composeTestRule) }
 
     /**
      * Инициализация Hilt перед каждым тестом.
