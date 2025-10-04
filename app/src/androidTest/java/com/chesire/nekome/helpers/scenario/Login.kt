@@ -14,7 +14,7 @@ class Login(
 ) : Scenario() {
 
     override val steps: TestContext<Unit>.() -> Unit = {
-        ActivityScenario.launch(MainActivity::class.java)
+
 
         val loginScreen = LoginScreen(semanticsProvider)
 
