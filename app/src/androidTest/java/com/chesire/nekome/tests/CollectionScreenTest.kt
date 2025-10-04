@@ -1,60 +1,30 @@
 package com.chesire.nekome.tests
 
-import androidx.test.core.app.ActivityScenario
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.chesire.nekome.base.BaseComposeTest
 import com.chesire.nekome.helpers.Users.TEST_USER_1
 import com.chesire.nekome.helpers.scenario.Login
-import com.chesire.nekome.ui.MainActivity
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Test
 import org.junit.runner.RunWith
 
-/**
- * Тесты для экрана коллекции серий (Anime/Manga).
- * 
- * Проверяет отображение всех элементов UI на главном экране после авторизации.
- */
 @HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
 class CollectionScreenTest : BaseComposeTest() {
 
     @Test
     fun checkAllCollectionScreenElements() = run {
-        // Авторизация
-        ActivityScenario.launch(MainActivity::class.java)
-        waitForTime(3000)
         scenario(Login(TEST_USER_1, composeTestRule))
 
-
-//        step("Ожидание загрузки главного экрана с коллекцией") {
-//            // Даем время на загрузку данных с сервера
-//            Thread.sleep(3000)
-//        }
-//
-        step("Проверить отображение TopBar") {
+        step("Проверка TopBar") {
             CollectionScreen {
-                root {
-                    flakySafely(10_000) {
-                        assertIsDisplayed()
-                    }
-                }
-            }
-        }
-
-        step("Проверить заголовок TopBar") {
-            CollectionScreen {
+                // Заголовок страницы
                 appBarTitle {
                     flakySafely(10_000) {
                         assertIsDisplayed()
                         assertTextEquals("Anime", includeEditableText = false)
                     }
                 }
-            }
-        }
-
-        step("Проверить кнопки в TopBar") {
-            CollectionScreen {
                 // Кнопка Filter
                 filterButton {
                     flakySafely(10_000) {
@@ -64,7 +34,6 @@ class CollectionScreenTest : BaseComposeTest() {
                         assertHasClickAction()
                     }
                 }
-
                 // Кнопка Sort
                 sortButton {
                     flakySafely(10_000) {
@@ -74,7 +43,6 @@ class CollectionScreenTest : BaseComposeTest() {
                         assertHasClickAction()
                     }
                 }
-
                 // Кнопка Refresh
                 refreshButton {
                     flakySafely(10_000) {
@@ -90,7 +58,6 @@ class CollectionScreenTest : BaseComposeTest() {
         step("Проверить FAB кнопку для поиска") {
             CollectionScreen {
                 searchFab {
-                    // FAB может быть скрыт при скролле, поэтому используем flakySafely
                     flakySafely(5_000) {
                         assertExists()
                     }
