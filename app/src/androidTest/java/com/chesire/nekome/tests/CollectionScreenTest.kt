@@ -1,9 +1,11 @@
 package com.chesire.nekome.tests
 
+import androidx.test.core.app.ActivityScenario
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.chesire.nekome.base.BaseComposeTest
 import com.chesire.nekome.helpers.Users.TEST_USER_1
 import com.chesire.nekome.helpers.scenario.Login
+import com.chesire.nekome.ui.MainActivity
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -20,18 +22,32 @@ class CollectionScreenTest : BaseComposeTest() {
     @Test
     fun checkAllCollectionScreenElements() = run {
         // Авторизация
+        ActivityScenario.launch(MainActivity::class.java)
+        waitForTime(3000)
         scenario(Login(TEST_USER_1, composeTestRule))
 
-        step("Ожидание загрузки главного экрана с коллекцией") {
-            // Даем время на загрузку данных с сервера
-            Thread.sleep(3000)
-        }
 
+//        step("Ожидание загрузки главного экрана с коллекцией") {
+//            // Даем время на загрузку данных с сервера
+//            Thread.sleep(3000)
+//        }
+//
         step("Проверить отображение TopBar") {
             CollectionScreen {
                 root {
                     flakySafely(10_000) {
                         assertIsDisplayed()
+                    }
+                }
+            }
+        }
+
+        step("Проверить заголовок TopBar") {
+            CollectionScreen {
+                appBarTitle {
+                    flakySafely(10_000) {
+                        assertIsDisplayed()
+                        assertTextEquals("Anime", includeEditableText = false)
                     }
                 }
             }
@@ -44,6 +60,8 @@ class CollectionScreenTest : BaseComposeTest() {
                     flakySafely(10_000) {
                         assertIsDisplayed()
                         assertIsEnabled()
+                        assertContentDescriptionEquals("Filter") // res/values/strings.xml
+                        assertHasClickAction()
                     }
                 }
 
@@ -52,6 +70,8 @@ class CollectionScreenTest : BaseComposeTest() {
                     flakySafely(10_000) {
                         assertIsDisplayed()
                         assertIsEnabled()
+                        assertContentDescriptionEquals("Sort") // res/values/strings.xml
+                        assertHasClickAction()
                     }
                 }
 
@@ -60,6 +80,8 @@ class CollectionScreenTest : BaseComposeTest() {
                     flakySafely(10_000) {
                         assertIsDisplayed()
                         assertIsEnabled()
+                        assertContentDescriptionEquals("Refresh series") // res/values/strings.xml
+                        assertHasClickAction()
                     }
                 }
             }

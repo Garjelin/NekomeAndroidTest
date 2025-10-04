@@ -27,6 +27,7 @@ class CollectionScreen(semanticsProvider: SemanticsNodeInteractionsProvider) :
     val root: KNode = createNode(SeriesCollectionTags.Root)
 
     // TopAppBar элементы
+    val appBarTitle: KNode = createNode(SeriesCollectionTags.AppBarTitle)
     val filterButton: KNode = createNode(SeriesCollectionTags.MenuFilter)
     val sortButton: KNode = createNode(SeriesCollectionTags.MenuSort)
     val refreshButton: KNode = createNode(SeriesCollectionTags.MenuRefresh)
