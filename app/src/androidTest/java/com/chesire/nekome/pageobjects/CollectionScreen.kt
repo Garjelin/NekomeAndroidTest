@@ -38,7 +38,6 @@ class CollectionScreen(semanticsProvider: SemanticsNodeInteractionsProvider) :
     fun searchFab(block: KExtendedFabNode.() -> Unit = {}): KExtendedFabNode {
         return createNodeByTestTag(
             testTag = SeriesCollectionTags.SearchFab,
-            position = 0,
             block = block
         )
     }
@@ -60,16 +59,17 @@ class CollectionScreen(semanticsProvider: SemanticsNodeInteractionsProvider) :
      * ```kotlin
      * seriesItem(0) {
      *     assertIsDisplayed()
+     *     poster { assertIsDisplayed() }
      *     title { assertTextContains("Attack on Titan") }
      *     progress { assertTextEquals("1 / 25") }
      *     plusOneButton { performClick() }
+     *     plusOneIcon { assertIsDisplayed() }
      * }
      * ```
      */
     fun seriesItem(index: Int = 0, block: KSeriesItemNode.() -> Unit = {}): KSeriesItemNode {
         return createNodeByTestTag(
             testTag = "${SeriesCollectionTags.SeriesItem}_$index",
-            position = 0,
             block = block
         )
     }

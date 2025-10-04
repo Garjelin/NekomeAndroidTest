@@ -34,16 +34,14 @@ abstract class BaseComposeScreen<out T : ComposeScreen<T>>(
 
     /**
      * Обобщённая функция для создания кастомных узлов по testTag.
-     * Поддерживает кастомные типы нод (KNode, KExtendedFabNode, и т.д.).
+     * Поддерживает кастомные типы нод (KNode, KExtendedFabNode, KSeriesItemNode, и т.д.).
      * 
      * @param testTag TestTag элемента
-     * @param position Позиция элемента (для случаев, когда несколько элементов имеют одинаковый testTag)
      * @param block DSL блок для настройки и взаимодействия с узлом
      * @return Созданный узел указанного типа
      */
     inline fun <reified T : KNode> createNodeByTestTag(
         testTag: String,
-        position: Int = 0,
         block: T.() -> Unit = {}
     ): T {
         val node = when (T::class) {
@@ -51,7 +49,6 @@ abstract class BaseComposeScreen<out T : ComposeScreen<T>>(
                 semanticsProvider = provider,
                 nodeMatcher = NodeMatcher(
                     matcher = hasTestTag(testTag),
-                    position = position,
                     useUnmergedTree = true
                 )
             )
@@ -59,21 +56,19 @@ abstract class BaseComposeScreen<out T : ComposeScreen<T>>(
                 semanticsProvider = provider,
                 nodeMatcher = NodeMatcher(
                     matcher = hasTestTag(testTag),
-                    position = position,
                     useUnmergedTree = true
                 ),
                 parentNode = null,
-                parentTestTag = testTag
+                parentTestTag = testTag // Передаём testTag для поиска дочерних элементов
             )
             KSeriesItemNode::class -> KSeriesItemNode(
                 semanticsProvider = provider,
                 nodeMatcher = NodeMatcher(
                     matcher = hasTestTag(testTag),
-                    position = position,
                     useUnmergedTree = true
                 ),
                 parentNode = null,
-                parentTestTag = testTag // testTag уже содержит индекс, например "SeriesItem_0"
+                parentTestTag = testTag // Передаём testTag для поиска дочерних элементов
             )
             else -> throw IllegalArgumentException("Unsupported node type: ${T::class}")
         } as T

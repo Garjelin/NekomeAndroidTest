@@ -8,6 +8,7 @@ import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.SemanticsNodeInteractionsProvider
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasTestTag
+import com.chesire.nekome.app.series.collection.ui.SeriesCollectionTags
 import io.github.kakaocup.compose.node.builder.NodeMatcher
 import io.github.kakaocup.compose.node.core.BaseNode
 import io.github.kakaocup.compose.node.element.KNode
@@ -22,14 +23,17 @@ import io.github.kakaocup.compose.node.element.KNode
  * - Подтип и дата (Subtype + Date)
  * - Прогресс (Progress)
  * - Кнопка +1 (PlusOne button)
+ * - Иконка +1 (PlusOne icon)
  * 
  * Использование:
  * ```kotlin
  * seriesItem(0) {
  *     assertIsDisplayed()
+ *     poster { assertIsDisplayed() }
  *     title { assertTextEquals("Attack on Titan") }
  *     progress { assertTextEquals("1 / 25") }
  *     plusOneButton { performClick() }
+ *     plusOneIcon { assertIsDisplayed() }
  * }
  * ```
  */
@@ -62,16 +66,14 @@ class KSeriesItemNode(
 
     /**
      * Постер серии (изображение слева).
-     * Ищет элемент с ролью Image.
+     * Использует тестовый тег для надежного поиска.
      */
     val poster: KNode by lazy {
         object : KNode(
             semanticsProvider = semanticsProvider,
             nodeMatcher = createChildMatcher(
                 predicate = { node ->
-                    node.config.getOrNull(SemanticsProperties.Role) == Role.Image &&
-                            // Исключаем иконку кнопки +1
-                            node.parent?.config?.getOrNull(SemanticsProperties.Role) != Role.Button
+                    node.config.getOrNull(SemanticsProperties.TestTag) == SeriesCollectionTags.Poster
                 }
             ),
             parentNode = this
@@ -146,10 +148,23 @@ class KSeriesItemNode(
             semanticsProvider = semanticsProvider,
             nodeMatcher = createChildMatcher(
                 predicate = { node ->
-                    // Ищем кнопку с иконкой PlusOne
-                    node.config.getOrNull(SemanticsProperties.Role) == Role.Button &&
-                            node.config.getOrNull(SemanticsProperties.ContentDescription)
-                                ?.any { it.contains("plus one", ignoreCase = true) } == true
+                    node.config.getOrNull(SemanticsProperties.TestTag) == SeriesCollectionTags.PlusOne
+                }
+            ),
+            parentNode = this
+        ) {}
+    }
+
+    /**
+     * Иконка внутри кнопки +1.
+     * Проверяет наличие иконки с правильным contentDescription.
+     */
+    val plusOneIcon: KNode by lazy {
+        object : KNode(
+            semanticsProvider = semanticsProvider,
+            nodeMatcher = createChildMatcher(
+                predicate = { node ->
+                    node.config.getOrNull(SemanticsProperties.TestTag) == SeriesCollectionTags.PlusOneIcon
                 }
             ),
             parentNode = this
