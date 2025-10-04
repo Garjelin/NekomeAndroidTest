@@ -4,18 +4,31 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.chesire.nekome.base.BaseComposeTest
 import com.chesire.nekome.helpers.Users.TEST_USER_1
 import com.chesire.nekome.helpers.scenario.Login
+import com.kaspersky.kaspresso.annotations.Regression
 import dagger.hilt.android.testing.HiltAndroidTest
+import io.qameta.allure.kotlin.Epic
+import io.qameta.allure.kotlin.Feature
+import io.qameta.allure.kotlin.Link
+import io.qameta.allure.kotlin.Owner
+import io.qameta.allure.kotlin.Story
+import io.qameta.allure.kotlin.junit4.DisplayName
 import org.junit.Test
 import org.junit.runner.RunWith
 
 @HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
+@Owner("Team")
+@Epic("Основной функционал")
+@Feature("Cтраница Anime")
+@Story("Главная страница")
 class CollectionScreenTest : BaseComposeTest() {
 
     @Test
+    @Regression
+    @Link(name = "Тест-кейс", url = "https://testrail.bcs.ru/testrail/index.php?/cases/view/60786871")
+    @DisplayName("Отображение элементов страницы Anime")
     fun checkAllCollectionScreenElements() = run {
         scenario(Login(TEST_USER_1, composeTestRule))
-
         step("Проверка TopBar") {
             CollectionScreen {
                 // Заголовок страницы
@@ -65,7 +78,7 @@ class CollectionScreenTest : BaseComposeTest() {
                     text {
                         flakySafely(10_000) {
                             assertIsDisplayed()
-                            assertTextEquals("Add new") // Текст кнопки
+                            assertTextEquals("Add new")
                         }
                     }
                     icon {
@@ -77,22 +90,9 @@ class CollectionScreenTest : BaseComposeTest() {
                 }
             }
         }
-
-        step("Проверить контейнер со списком серий") {
-            CollectionScreen {
-                refreshContainer {
-                    flakySafely(10_000) {
-                        assertIsDisplayed()
-                    }
-                }
-            }
-        }
-
         step("Проверить что отображаются карточки серий") {
             CollectionScreen {
-                // Просто проверяем что контейнер со списком существует
-                // Детальная проверка карточек будет в других тестах
-                refreshContainer {
+                seriesCollectionContainer {
                     flakySafely(10_000) {
                         assertIsDisplayed()
                     }
@@ -133,7 +133,7 @@ class CollectionScreenTest : BaseComposeTest() {
 
         step("Проверить что контейнер остается видимым") {
             CollectionScreen {
-                refreshContainer {
+                seriesCollectionContainer {
                     flakySafely(10_000) {
                         assertIsDisplayed()
                     }
