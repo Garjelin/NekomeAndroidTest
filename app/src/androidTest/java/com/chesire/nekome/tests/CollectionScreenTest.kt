@@ -22,7 +22,7 @@ class CollectionScreenTest : BaseComposeTest() {
                 appBarTitle {
                     flakySafely(10_000) {
                         assertIsDisplayed()
-                        assertTextEquals("Anime", includeEditableText = false)
+                        assertTextEquals("Anime")
                     }
                 }
                 // Кнопка Filter
@@ -54,12 +54,13 @@ class CollectionScreenTest : BaseComposeTest() {
                 }
             }
         }
-
+//        waitForTime(1000000)
         step("Проверить FAB кнопку для поиска") {
             CollectionScreen {
-                searchFab {
-                    flakySafely(5_000) {
-                        assertExists()
+                searchFabTitle {
+                    flakySafely(10_000) {
+                        assertIsDisplayed()
+                        assertTextEquals("Add new")
                     }
                 }
             }
