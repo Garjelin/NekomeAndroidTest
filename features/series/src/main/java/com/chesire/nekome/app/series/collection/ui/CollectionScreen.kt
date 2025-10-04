@@ -183,7 +183,10 @@ private fun Render(
             ) {
                 ExtendedFloatingActionButton(
                     text = {
-                        Text(text = stringResource(id = StringResource.series_list_search_fab_text))
+                        Text(
+                            text = stringResource(id = StringResource.series_list_search_fab_text),
+                            modifier = Modifier.semantics { testTag = SeriesCollectionTags.SearchFabTitle },
+                        )
                     },
                     icon = {
                         Icon(
@@ -544,6 +547,7 @@ object SeriesCollectionTags {
     const val EmptyView = "SeriesCollectionEmptyView"
     const val RefreshContainer = "SeriesCollectionRefreshContainer"
     const val SearchFab = "SeriesCollectionSearchFab"
+    const val SearchFabTitle = "SeriesCollectionSearchFabTitle"
     const val SeriesItem = "SeriesCollectionSeriesItem"
     const val PlusOne = "SeriesCollectionPlusOne"
     const val Snackbar = "SeriesCollectionSnackbar"

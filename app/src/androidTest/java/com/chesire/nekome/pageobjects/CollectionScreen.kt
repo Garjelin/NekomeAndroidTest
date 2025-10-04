@@ -34,6 +34,7 @@ class CollectionScreen(semanticsProvider: SemanticsNodeInteractionsProvider) :
 
     // Floating Action Button для поиска
     val searchFab: KNode = createNode(SeriesCollectionTags.SearchFab)
+    val searchFabTitle: KNode = createNode(SeriesCollectionTags.SearchFabTitle)
 
     // Контейнер со списком серий
     val refreshContainer: KNode = createNode(SeriesCollectionTags.RefreshContainer)
