@@ -33,26 +33,35 @@ class LoginFlowComposeTest : BaseComposeTest() {
             launchActivity()
         }
 
-        step("Проверить поле Email и кликнуть на него") {
+        step("Проверить поле Email, кликнуть и ввести текст") {
             LoginScreen {
                 usernameField {
                     flakySafely(10_000) {
                         assertIsDisplayed()
-                        // Проверяем, что label содержит текст "Kitsu email"
-                        assertTextContains("Kitsu email", substring = true, ignoreCase = false)
+                        assertTextEquals("Kitsu email")
                     }
                     performClick()
+                    performTextInput("testprofdepo@gmail.com")
+                }
+                passwordField {
+                    flakySafely(10_000) {
+                        assertIsDisplayed()
+                        assertTextEquals("Password")
+                    }
+                    performClick()
+                    performTextInput("Qwerty123")
                 }
             }
         }
-
         step("Проверить текст кнопки Login") {
             LoginScreen {
                 loginButton {
                     flakySafely(10_000) {
                         assertIsDisplayed()
-                        assertTextEquals("Login", includeEditableText = false)
+                        assertTextEquals("Login")
+                        assertIsEnabled()
                     }
+                    performClick()
                 }
             }
             waitForTime(1000000)
