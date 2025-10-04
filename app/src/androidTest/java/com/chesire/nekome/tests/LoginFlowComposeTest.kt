@@ -3,13 +3,10 @@ package com.chesire.nekome.tests
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.assertTextEquals
-import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.chesire.nekome.app.login.credentials.ui.CredentialsTags
 import com.chesire.nekome.base.BaseComposeTest
-import com.chesire.nekome.pageobjects.loginScreen
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -37,10 +34,15 @@ class LoginFlowComposeTest : BaseComposeTest() {
         }
 
         step("Проверить текст кнопки Login") {
-            composeTestRule
-                .onNodeWithTag(CredentialsTags.LoginButton)
-                .assertIsDisplayed()
-                .assertTextEquals("Logan", includeEditableText = false)
+            LoginScreen {
+                loginButton {
+                    flakySafely(10_000) {
+                        assertIsDisplayed()
+                        assertTextEquals("Login", includeEditableText = false)
+                    }
+                }
+            }
+            waitForTime(1000000)
         }
     }
 
@@ -63,7 +65,7 @@ class LoginFlowComposeTest : BaseComposeTest() {
 
         // Шаг 2: Заполняем форму логина
         step("Заполнить форму логина") {
-            loginScreen(composeTestRule) {
+            LoginScreen {
                 // flakySafely делает проверку устойчивой к flaky тестам
                 usernameField {
                     flakySafely(5000) {
@@ -83,7 +85,7 @@ class LoginFlowComposeTest : BaseComposeTest() {
 
         // Шаг 3: Нажимаем кнопку логина
         step("Нажать кнопку логина") {
-            loginScreen(composeTestRule) {
+            LoginScreen {
                 loginButton {
                     flakySafely(5000) {
                         assertIsDisplayed()
@@ -112,7 +114,7 @@ class LoginFlowComposeTest : BaseComposeTest() {
         }
 
         step("Ввести неверные данные") {
-            loginScreen(composeTestRule) {
+            LoginScreen {
                 usernameField {
                     performTextInput("wrong@example.com")
                 }
@@ -128,7 +130,7 @@ class LoginFlowComposeTest : BaseComposeTest() {
         }
 
         step("Проверить сообщение об ошибке") {
-            loginScreen(composeTestRule) {
+            LoginScreen {
                 errorMessage {
                     flakySafely(10000) {
                         assertIsDisplayed()
@@ -153,7 +155,7 @@ class LoginFlowComposeTest : BaseComposeTest() {
         }
 
         step("Нажать 'Forgot Password'") {
-            loginScreen(composeTestRule) {
+            LoginScreen {
                 forgotPasswordButton {
                     flakySafely {
                         assertIsDisplayed()
