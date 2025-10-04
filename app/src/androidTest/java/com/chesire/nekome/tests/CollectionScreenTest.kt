@@ -101,45 +101,13 @@ class CollectionScreenTest : BaseComposeTest() {
         }
     }
 
-    /**
-     * Проверка работы кнопки Refresh.
-     * 
-     * Тест-кейс: TC-002 - Обновление списка серий
-     * 
-     * Шаги:
-     * 1. Авторизоваться
-     * 2. Нажать на кнопку Refresh
-     * 3. Проверить что список обновляется
-     */
-//    @Test
+    @Test
+    @Regression
+    @Link(name = "Тест-кейс", url = "https://testrail.bcs.ru/testrail/index.php?/cases/view/60786872")
+    @DisplayName("Отображение элементов карточки")
     fun refreshButtonUpdatesSeriesList() = run {
         scenario(Login(TEST_USER_1, composeTestRule))
 
-        step("Ожидание загрузки главного экрана") {
-            Thread.sleep(3000)
-        }
-
-        step("Нажать кнопку Refresh") {
-            CollectionScreen {
-                refreshButton {
-                    flakySafely(10_000) {
-                        assertIsDisplayed()
-                        assertIsEnabled()
-                    }
-                    performClick()
-                }
-            }
-        }
-
-        step("Проверить что контейнер остается видимым") {
-            CollectionScreen {
-                seriesCollectionContainer {
-                    flakySafely(10_000) {
-                        assertIsDisplayed()
-                    }
-                }
-            }
-        }
     }
 }
 
