@@ -71,6 +71,13 @@ abstract class BaseComposeTest : TestCase(
     protected val LoginScreen: LoginScreen by lazy { LoginScreen(composeTestRule) }
 
     /**
+     * Page Object для экрана коллекции серий (Anime/Manga).
+     */
+    protected val CollectionScreen: com.chesire.nekome.pageobjects.CollectionScreen by lazy {
+        com.chesire.nekome.pageobjects.CollectionScreen(composeTestRule)
+    }
+
+    /**
      * Инициализация Hilt перед каждым тестом.
      */
     @Before
