@@ -8,14 +8,7 @@ package com.chesire.nekome.helpers
  */
 enum class Users(val login: String, val password: String) {
 
-    /**
-     * Дефолтный тестовый пользователь
-     */
-    DEFAULT_USER("testprofdepo@gmail.com", "Qwerty123"),
-
-    /**
-     * Второй тестовый пользователь (если нужен)
-     */
-    TEST_USER_2("test2@example.com", "Password123"),
+    TEST_USER_1("testprofdepo@gmail.com", "Qwerty123"),
+    TEST_USER_2("testprofdepo2@gmail.com", "Qwerty123"),
 }
 

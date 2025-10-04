@@ -2,7 +2,7 @@ package com.chesire.nekome.tests
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.chesire.nekome.base.BaseComposeTest
-import com.chesire.nekome.helpers.Users.DEFAULT_USER
+import com.chesire.nekome.helpers.Users.TEST_USER_1
 import com.chesire.nekome.helpers.scenario.Login
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Test
@@ -14,7 +14,7 @@ class LoginFlowComposeTest : BaseComposeTest() {
 
     @Test
     fun successfulLogin_withScenario() = run {
-        scenario(Login(DEFAULT_USER, composeTestRule))
+        scenario(Login(TEST_USER_1, composeTestRule))
         waitForTime(1000000)
     }
 
