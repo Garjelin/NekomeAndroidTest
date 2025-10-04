@@ -43,7 +43,7 @@ class SeriesListScreen(semanticsProvider: SemanticsNodeInteractionsProvider) :
     val searchFab: KNode = createNode(SeriesCollectionTags.SearchFab)
     
     // Контейнер списка с pull-to-refresh
-    val refreshContainer: KNode = createNode(SeriesCollectionTags.RefreshContainer)
+    val refreshContainer: KNode = createNode(SeriesCollectionTags.SeriesCollectionContainer)
     
     // Empty view (когда список пуст)
     val emptyView: KNode = createNode(SeriesCollectionTags.EmptyView)

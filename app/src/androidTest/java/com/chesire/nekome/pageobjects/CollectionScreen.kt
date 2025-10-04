@@ -34,25 +34,12 @@ class CollectionScreen(semanticsProvider: SemanticsNodeInteractionsProvider) :
     val sortButton: KNode = createNode(SeriesCollectionTags.MenuSort)
     val refreshButton: KNode = createNode(SeriesCollectionTags.MenuRefresh)
 
-    /**
-     * Floating Action Button для поиска.
-     * Использует кастомный класс для доступа к внутренним элементам (text, icon).
-     * 
-     * Пример использования:
-     * ```kotlin
-     * searchFab {
-     *     assertIsDisplayed()
-     *     text { assertTextEquals("Add new") }
-     *     icon { assertContentDescriptionEquals("Search") }
-     * }
-     * ```
-     */
     fun searchFab(block: KExtendedFabNode.() -> Unit = {}): KExtendedFabNode {
         return createNodeByTestTag(SeriesCollectionTags.SearchFab, block)
     }
 
     // Контейнер со списком серий
-    val refreshContainer: KNode = createNode(SeriesCollectionTags.RefreshContainer)
+    val seriesCollectionContainer: KNode = createNode(SeriesCollectionTags.SeriesCollectionContainer)
 
     // Empty View (показывается когда нет серий)
     val emptyView: KNode = createNode(SeriesCollectionTags.EmptyView)

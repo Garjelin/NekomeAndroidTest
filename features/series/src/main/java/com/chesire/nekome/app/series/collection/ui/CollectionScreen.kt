@@ -256,7 +256,7 @@ private fun SeriesCollection(
         Box(
             modifier = modifier
                 .pullRefresh(pullRefreshState)
-                .semantics { testTag = SeriesCollectionTags.RefreshContainer }
+                .semantics { testTag = SeriesCollectionTags.SeriesCollectionContainer }
         ) {
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
@@ -545,7 +545,7 @@ private fun Preview() {
 object SeriesCollectionTags {
     const val Root = "SeriesCollectionRoot"
     const val EmptyView = "SeriesCollectionEmptyView"
-    const val RefreshContainer = "SeriesCollectionRefreshContainer"
+    const val SeriesCollectionContainer = "SeriesCollectionContainer"
     const val SearchFab = "SeriesCollectionSearchFab"
     const val SearchFabTitle = "SeriesCollectionSearchFabTitle"
     const val SeriesItem = "SeriesCollectionSeriesItem"
