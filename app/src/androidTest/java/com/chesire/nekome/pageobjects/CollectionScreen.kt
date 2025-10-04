@@ -3,6 +3,7 @@ package com.chesire.nekome.pageobjects
 import androidx.compose.ui.test.SemanticsNodeInteractionsProvider
 import com.chesire.nekome.app.series.collection.ui.SeriesCollectionTags
 import com.chesire.nekome.base.BaseComposeScreen
+import com.chesire.nekome.helpers.kNodes.KExtendedFabNode
 import io.github.kakaocup.compose.node.element.KNode
 
 /**
@@ -11,11 +12,12 @@ import io.github.kakaocup.compose.node.element.KNode
  * Использование в тестах:
  * ```kotlin
  * CollectionScreen {
- *     topBarTitle {
+ *     appBarTitle {
  *         assertIsDisplayed()
  *     }
- *     seriesItems {
+ *     searchFab {
  *         assertIsDisplayed()
+ *         text { assertTextEquals("Add new") }
  *     }
  * }
  * ```
@@ -32,9 +34,22 @@ class CollectionScreen(semanticsProvider: SemanticsNodeInteractionsProvider) :
     val sortButton: KNode = createNode(SeriesCollectionTags.MenuSort)
     val refreshButton: KNode = createNode(SeriesCollectionTags.MenuRefresh)
 
-    // Floating Action Button для поиска
-    val searchFab: KNode = createNode(SeriesCollectionTags.SearchFab)
-    val searchFabTitle: KNode = createNode(SeriesCollectionTags.SearchFabTitle)
+    /**
+     * Floating Action Button для поиска.
+     * Использует кастомный класс для доступа к внутренним элементам (text, icon).
+     * 
+     * Пример использования:
+     * ```kotlin
+     * searchFab {
+     *     assertIsDisplayed()
+     *     text { assertTextEquals("Add new") }
+     *     icon { assertContentDescriptionEquals("Search") }
+     * }
+     * ```
+     */
+    fun searchFab(block: KExtendedFabNode.() -> Unit = {}): KExtendedFabNode {
+        return createNodeByTestTag(SeriesCollectionTags.SearchFab, block)
+    }
 
     // Контейнер со списком серий
     val refreshContainer: KNode = createNode(SeriesCollectionTags.RefreshContainer)
@@ -61,4 +76,3 @@ fun collectionScreen(
     semanticsProvider: SemanticsNodeInteractionsProvider,
     block: CollectionScreen.() -> Unit
 ) = CollectionScreen(semanticsProvider).apply(block)
-
