@@ -38,7 +38,7 @@ class LoginFlowComposeTest : BaseComposeTest() {
                 usernameField {
                     flakySafely(10_000) {
                         assertIsDisplayed()
-                        assertTextEquals("Kitsu email")
+                        assertTextEquals("Kitsu email", includeEditableText = false)
                     }
                     performClick()
                     performTextInput("testprofdepo@gmail.com")
@@ -46,26 +46,26 @@ class LoginFlowComposeTest : BaseComposeTest() {
                 passwordField {
                     flakySafely(10_000) {
                         assertIsDisplayed()
-                        assertTextEquals("Password")
+                        assertTextEquals("Password", includeEditableText = false)
                     }
                     performClick()
                     performTextInput("Qwerty123")
                 }
             }
         }
-        step("Проверить текст кнопки Login") {
+        step("Проверить текст кнопки Login и нажать") {
             LoginScreen {
                 loginButton {
                     flakySafely(10_000) {
                         assertIsDisplayed()
-                        assertTextEquals("Login")
+                        assertTextEquals("Login", includeEditableText = false)
                         assertIsEnabled()
                     }
                     performClick()
                 }
             }
-            waitForTime(1000000)
         }
+        waitForTime(1000000)
     }
 
     /**
