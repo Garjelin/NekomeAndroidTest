@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <option name="testRunner" value="CHOOSE_PER_TEST" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="gradleJvm" value="#GRADLE_LOCAL_JAVA_HOME" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/core" />
+            <option value="$PROJECT_DIR$/core/compose" />
+            <option value="$PROJECT_DIR$/core/preferences" />
+            <option value="$PROJECT_DIR$/core/resources" />
+            <option value="$PROJECT_DIR$/features" />
+            <option value="$PROJECT_DIR$/features/login" />
+            <option value="$PROJECT_DIR$/features/search" />
+            <option value="$PROJECT_DIR$/features/series" />
+            <option value="$PROJECT_DIR$/features/serieswidget" />
+            <option value="$PROJECT_DIR$/features/settings" />
+            <option value="$PROJECT_DIR$/libraries" />
+            <option value="$PROJECT_DIR$/libraries/core" />
+            <option value="$PROJECT_DIR$/libraries/database" />
+            <option value="$PROJECT_DIR$/libraries/datasource" />
+            <option value="$PROJECT_DIR$/libraries/datasource/activity" />
+            <option value="$PROJECT_DIR$/libraries/datasource/auth" />
+            <option value="$PROJECT_DIR$/libraries/datasource/search" />
+            <option value="$PROJECT_DIR$/libraries/datasource/series" />
+            <option value="$PROJECT_DIR$/libraries/datasource/trending" />
+            <option value="$PROJECT_DIR$/libraries/datasource/user" />
+            <option value="$PROJECT_DIR$/libraries/kitsu" />
+            <option value="$PROJECT_DIR$/libraries/kitsu/activity" />
+            <option value="$PROJECT_DIR$/libraries/kitsu/auth" />
+            <option value="$PROJECT_DIR$/libraries/kitsu/library" />
+            <option value="$PROJECT_DIR$/libraries/kitsu/search" />
+            <option value="$PROJECT_DIR$/libraries/kitsu/trending" />
+            <option value="$PROJECT_DIR$/libraries/kitsu/user" />
+            <option value="$PROJECT_DIR$/testing" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+    </option>
+  </component>
+</project>
