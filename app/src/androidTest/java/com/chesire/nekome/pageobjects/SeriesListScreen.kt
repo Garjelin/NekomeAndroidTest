@@ -69,11 +69,3 @@ class SeriesListScreen(semanticsProvider: SemanticsNodeInteractionsProvider) :
     fun plusOneButton(): KNode = createNode(SeriesCollectionTags.PlusOne)
 }
 
-/**
- * DSL функция для работы с SeriesListScreen.
- */
-fun seriesListScreen(
-    semanticsProvider: SemanticsNodeInteractionsProvider,
-    block: SeriesListScreen.() -> Unit
-) = SeriesListScreen(semanticsProvider).apply(block)
-
