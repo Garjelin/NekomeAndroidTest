@@ -97,6 +97,16 @@ class CollectionScreenTest : BaseComposeTest() {
                         assertIsDisplayed()
                     }
                 }
+                var index = 0
+                while (index < getSeriesItemsCount()) {
+                    seriesItem(index) {
+                        flakySafely(10_000) {
+                            assertIsDisplayed()
+                            assertHasClickAction()
+                        }
+                    }
+                    index++
+                }
             }
         }
     }
@@ -109,12 +119,8 @@ class CollectionScreenTest : BaseComposeTest() {
         scenario(Login(TEST_USER_1, composeTestRule))
         step("Проверить элементы первой карточки серии") {
             CollectionScreen {
-                // Блок карточки
+                //  Первый блок карточки
                 seriesItem(0) {
-                    flakySafely(10_000) {
-                        assertIsDisplayed()
-                        assertHasClickAction()
-                    }
                     // Заголовок
                     title {
                         flakySafely(10_000) {
@@ -143,23 +149,11 @@ class CollectionScreenTest : BaseComposeTest() {
                             assertIsDisplayed()
                         }
                     }
-//                    waitForTime(1000000)
                     // Проверка постера
                     poster {
                         flakySafely(10_000) {
                             assertIsDisplayed()
                         }
-                    }
-                }
-            }
-        }
-        
-        step("Проверить вторую карточку серии") {
-            CollectionScreen {
-                seriesItem(1) {
-                    flakySafely(10_000) {
-                        assertIsDisplayed()
-                        assertHasClickAction()
                     }
                 }
             }

@@ -1,6 +1,9 @@
 package com.chesire.nekome.pageobjects
 
+import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.semantics.getOrNull
 import androidx.compose.ui.test.SemanticsNodeInteractionsProvider
+import androidx.compose.ui.test.hasTestTag
 import com.chesire.nekome.app.series.collection.ui.SeriesCollectionTags
 import com.chesire.nekome.base.BaseComposeScreen
 import com.chesire.nekome.helpers.kNodes.KExtendedFabNode
@@ -19,6 +22,18 @@ import io.github.kakaocup.compose.node.element.KNode
  *     searchFab {
  *         assertIsDisplayed()
  *         text { assertTextEquals("Add new") }
+ *     }
+ *     
+ *     // Проверить количество карточек серий
+ *     assertSeriesItemsCount(10)
+ *     
+ *     // Или получить количество
+ *     val count = getSeriesItemsCount()
+ *     
+ *     // Работа с конкретной карточкой
+ *     seriesItem(0) {
+ *         poster { assertIsDisplayed() }
+ *         title { assertTextContains("Attack on Titan") }
  *     }
  * }
  * ```
@@ -72,6 +87,48 @@ class CollectionScreen(semanticsProvider: SemanticsNodeInteractionsProvider) :
             testTag = "${SeriesCollectionTags.SeriesItem}_$index",
             block = block
         )
+    }
+
+    /**
+     * Получить количество карточек серий в списке через CollectionInfo.
+     * 
+     * Пример использования:
+     * ```kotlin
+     * CollectionScreen {
+     *     val count = getSeriesItemsCount()
+     *     println("Found $count series items")
+     * }
+     * ```
+     * 
+     * @return количество карточек серий в списке
+     */
+    fun getSeriesItemsCount(): Int {
+        val node = provider.onNode(
+            hasTestTag(SeriesCollectionTags.SeriesCollectionContainer),
+            useUnmergedTree = true
+        ).fetchSemanticsNode()
+        
+        val collectionInfo = node.config.getOrNull(SemanticsProperties.CollectionInfo)
+        return collectionInfo?.rowCount ?: 0
+    }
+
+    /**
+     * Проверить, что количество карточек серий соответствует ожидаемому.
+     * 
+     * Пример использования:
+     * ```kotlin
+     * CollectionScreen {
+     *     assertSeriesItemsCount(10)
+     * }
+     * ```
+     * 
+     * @param expectedCount ожидаемое количество карточек
+     */
+    fun assertSeriesItemsCount(expectedCount: Int) {
+        val actualCount = getSeriesItemsCount()
+        assert(actualCount == expectedCount) {
+            "Expected $expectedCount series items, but found $actualCount"
+        }
     }
 }
 
