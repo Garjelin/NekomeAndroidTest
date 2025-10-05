@@ -92,13 +92,13 @@ class CollectionScreenTest : BaseComposeTest() {
         }
         step("Проверить что отображаются карточки серий") {
             CollectionScreen {
-                seriesCollectionContainer {
+                seriesCollection.container {
                     flakySafely(10_000) {
                         assertIsDisplayed()
                     }
                 }
                 var index = 0
-                while (index < getSeriesItemsCount()) {
+                while (index < seriesCollection.getSize()) {
                     seriesItem(index) {
                         flakySafely(10_000) {
                             assertIsDisplayed()
