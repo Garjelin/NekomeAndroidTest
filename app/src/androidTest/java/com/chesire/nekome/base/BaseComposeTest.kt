@@ -4,13 +4,22 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.printToLog
 import androidx.test.core.app.ActivityScenario
+import com.adevinta.android.barista.rule.cleardata.ClearDatabaseRule
+import com.adevinta.android.barista.rule.cleardata.ClearPreferencesRule
+import com.chesire.nekome.core.preferences.ApplicationPreferences
+import com.chesire.nekome.core.preferences.SeriesPreferences
+import com.chesire.nekome.datasource.auth.local.AuthProvider
+import com.chesire.nekome.helpers.logout
+import com.chesire.nekome.helpers.reset
 import com.chesire.nekome.pageobjects.LoginScreen
 import com.chesire.nekome.ui.MainActivity
 import com.kaspersky.kaspresso.kaspresso.Kaspresso
 import com.kaspersky.kaspresso.testcases.api.testcase.TestCase
 import dagger.hilt.android.testing.HiltAndroidRule
+import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
+import javax.inject.Inject
 
 /**
  * Базовый класс для Compose UI тестов с Kaspresso.
@@ -45,6 +54,18 @@ abstract class BaseComposeTest : TestCase(
     val hiltRule = HiltAndroidRule(this)
 
     /**
+     * Правило для очистки базы данных между тестами.
+     */
+    @get:Rule(order = 1)
+    val clearDatabase = ClearDatabaseRule()
+
+    /**
+     * Правило для очистки SharedPreferences между тестами.
+     */
+    @get:Rule(order = 2)
+    val clearPreferences = ClearPreferencesRule()
+
+    /**
      * ComposeTestRule для работы с Compose UI элементами.
      * 
      * Использование:
@@ -52,8 +73,17 @@ abstract class BaseComposeTest : TestCase(
      * composeTestRule.onNodeWithTag("LoginButton").performClick()
      * ```
      */
-    @get:Rule(order = 1)
+    @get:Rule(order = 3)
     val composeTestRule = createComposeRule()
+
+    @Inject
+    lateinit var authProvider: AuthProvider
+
+    @Inject
+    lateinit var applicationPreferences: ApplicationPreferences
+
+    @Inject
+    lateinit var seriesPreferences: SeriesPreferences
 
     /**
      * Page Object для экрана логина.
@@ -78,11 +108,20 @@ abstract class BaseComposeTest : TestCase(
     }
 
     /**
-     * Инициализация Hilt перед каждым тестом.
+     * Инициализация Hilt и очистка состояния перед каждым тестом.
      */
     @Before
-    open fun setUpHilt() {
+    open fun setUp() {
         hiltRule.inject()
+        
+        // Очищаем состояние аутентификации и настройки
+        runBlocking {
+            applicationPreferences.reset()
+            seriesPreferences.reset()
+        }
+        
+        // Логаутим пользователя, чтобы каждый тест начинался с экрана логина
+        authProvider.logout()
     }
 
     /**
@@ -117,6 +156,18 @@ abstract class BaseComposeTest : TestCase(
     protected fun printSemanticTree(tag: String = "SemanticTree") {
         composeTestRule.onRoot(useUnmergedTree = true)
             .printToLog(tag)
+    }
+
+    /**
+     * Явная очистка состояния приложения.
+     * Используйте этот метод, если нужно очистить состояние в середине теста.
+     */
+    protected fun clearAppState() {
+        runBlocking {
+            applicationPreferences.reset()
+            seriesPreferences.reset()
+        }
+        authProvider.logout()
     }
 }
 

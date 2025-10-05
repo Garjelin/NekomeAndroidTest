@@ -3,6 +3,7 @@ package com.chesire.nekome.tests
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.chesire.nekome.base.BaseComposeTest
 import com.chesire.nekome.helpers.Users.TEST_USER_1
+import com.chesire.nekome.helpers.annotations.Debug
 import com.chesire.nekome.helpers.assertTextMatches
 import com.chesire.nekome.helpers.scenario.Login
 import com.kaspersky.kaspresso.annotations.Regression
@@ -16,6 +17,7 @@ import io.qameta.allure.kotlin.junit4.DisplayName
 import org.junit.Test
 import org.junit.runner.RunWith
 
+@Debug
 @HiltAndroidTest
 @RunWith(AndroidJUnit4::class)
 @Owner("Team")
