@@ -101,53 +101,35 @@ class CollectionScreenTest : BaseComposeTest() {
         }
     }
 
-    /**
-     * Проверка отображения элементов внутри карточки серии.
-     * 
-     * Тест-кейс: TC-002 - Элементы карточки серии
-     * 
-     * Шаги:
-     * 1. Авторизоваться
-     * 2. Открыть экран коллекции
-     * 3. Проверить первую карточку серии:
-     *    - Заголовок отображается
-     *    - Подтип и дата отображаются
-     *    - Прогресс отображается
-     *    - Постер отображается
-     */
     @Test
     @Regression
     @Link(name = "Тест-кейс", url = "https://testrail.bcs.ru/testrail/index.php?/cases/view/60786872")
     @DisplayName("Отображение элементов карточки серии")
     fun checkSeriesCardElements() = run {
         scenario(Login(TEST_USER_1, composeTestRule))
-
         step("Проверить элементы первой карточки серии") {
             CollectionScreen {
+                // Блок карточки
                 seriesItem(0) {
                     flakySafely(10_000) {
-                        assertIsDisplayed() // Сама карточка видна
-                        assertHasClickAction() // Карточка кликабельна
+                        assertIsDisplayed()
+                        assertHasClickAction()
                     }
-                    
-                    // Проверка заголовка
+                    // Заголовок
                     title {
                         flakySafely(10_000) {
                             assertIsDisplayed()
-                            // Проверяем что заголовок не пустой
                             assertExists()
                         }
                     }
-                    
-                    // Проверка подтипа и даты
+                    // Подзаголовок и дата
                     subtypeAndDate {
                         flakySafely(10_000) {
                             assertIsDisplayed()
                             assertExists()
                         }
                     }
-                    
-                    // Проверка прогресса
+                    // Прогресс
                     progress {
                         flakySafely(10_000) {
                             assertIsDisplayed()
@@ -155,6 +137,7 @@ class CollectionScreenTest : BaseComposeTest() {
                             assertExists()
                         }
                     }
+                    // Иконка +1
                     plusOneButton {
                         flakySafely(10_000) {
                             assertIsDisplayed()
