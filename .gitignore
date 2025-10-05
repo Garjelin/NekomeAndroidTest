@@ -160,7 +160,6 @@ test_local.sh
 
 # Marathon binary и библиотеки (не нужны в репозитории)
 marathon-*/
-
 marathon*.zip
 
 # Результаты тестов Marathon
