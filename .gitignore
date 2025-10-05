@@ -96,6 +96,9 @@ $RECYCLE.BIN/
 # Compiled Kotlin
 *.kotlin_module
 
+# Kotlin compiler sessions (temporary files)
+.kotlin/
+
 # ============================================
 # Testing
 # ============================================

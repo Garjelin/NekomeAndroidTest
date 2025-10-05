@@ -286,7 +286,8 @@ private fun LoginButton(isEnabled: Boolean, isLoggingIn: Boolean, onLoginPressed
                 onLoginPressed()
                 keyboardController?.hide()
             }
-        }
+        },
+        modifier = Modifier.semantics { testTag = CredentialsTags.LoginButton }
     ) {
         Text(text = stringResource(id = StringResource.login_login))
     }
@@ -336,5 +337,6 @@ object CredentialsTags {
     const val Root = "CredentialsRoot"
     const val Username = "CredentialsUsername"
     const val Password = "CredentialsPassword"
+    const val LoginButton = "CredentialsLoginButton"
     const val Snackbar = "CredentialsSnackbar"
 }

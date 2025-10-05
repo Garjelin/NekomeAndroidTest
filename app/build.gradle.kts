@@ -53,6 +53,8 @@ android {
         resources.excludes.add("META-INF/DEPENDENCIES")
         resources.excludes.add("META-INF/LICENSE")
         resources.excludes.add("META-INF/LICENSE.txt")
+        resources.excludes.add("META-INF/LICENSE.md")
+        resources.excludes.add("META-INF/LICENSE-notice.md")
         resources.excludes.add("META-INF/license.txt")
         resources.excludes.add("META-INF/NOTICE")
         resources.excludes.add("META-INF/NOTICE.txt")
@@ -132,9 +134,25 @@ dependencies {
     testImplementation(libs.mockk)
 
     androidTestImplementation(project(":testing"))
+    
+    // Kaspresso + Kakao Compose для UI тестирования (как в MyBroker)
+    androidTestImplementation("com.kaspersky.android-components:kaspresso:1.5.5")
+    androidTestImplementation("com.kaspersky.android-components:kaspresso-compose-support:1.5.5")
+    androidTestImplementation("io.github.kakaocup:compose:0.4.3")
+    
+    // Allure для красивых отчетов
+    androidTestImplementation("io.qameta.allure:allure-kotlin-model:2.4.0")
+    androidTestImplementation("io.qameta.allure:allure-kotlin-commons:2.4.0")
+    androidTestImplementation("io.qameta.allure:allure-kotlin-junit4:2.4.0")
+    androidTestImplementation("io.qameta.allure:allure-kotlin-android:2.4.0")
+    
+    // Compose Testing
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
+    
+    // Espresso + Testing infrastructure
     androidTestImplementation(libs.adevinta.barista)
     androidTestImplementation(libs.androidx.arch.core.testing)
-    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     androidTestImplementation(libs.androidx.test.espresso.core)
     androidTestImplementation(libs.androidx.test.espresso.intents)
     androidTestImplementation(libs.androidx.test.ext.junit)
