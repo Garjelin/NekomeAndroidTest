@@ -3,6 +3,7 @@ package com.chesire.nekome.tests
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.chesire.nekome.base.BaseComposeTest
 import com.chesire.nekome.helpers.Users.TEST_USER_1
+import com.chesire.nekome.helpers.assertTextMatches
 import com.chesire.nekome.helpers.scenario.Login
 import com.kaspersky.kaspresso.annotations.Regression
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -97,15 +98,13 @@ class CollectionScreenTest : BaseComposeTest() {
                         assertIsDisplayed()
                     }
                 }
-                var index = 0
-                while (index < seriesCollection.getSize()) {
+                for (index in 0 until seriesCollection.getSize()) {
                     seriesItem(index) {
                         flakySafely(10_000) {
                             assertIsDisplayed()
                             assertHasClickAction()
                         }
                     }
-                    index++
                 }
             }
         }
@@ -139,8 +138,7 @@ class CollectionScreenTest : BaseComposeTest() {
                     progress {
                         flakySafely(10_000) {
                             assertIsDisplayed()
-                            // Прогресс содержит слэш (например "1 / 25")
-                            assertExists()
+                            assertTextMatches(Regex("""\d+ / \d+"""))
                         }
                     }
                     // Иконка +1
