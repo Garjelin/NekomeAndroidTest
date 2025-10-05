@@ -64,6 +64,8 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.CollectionInfo
+import androidx.compose.ui.semantics.collectionInfo
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.style.TextAlign
@@ -255,12 +257,15 @@ private fun SeriesCollection(
             onRefresh = onRefresh
         )
         Box(
-            modifier = modifier
-                .pullRefresh(pullRefreshState)
-                .semantics { testTag = SeriesCollectionTags.SeriesCollectionContainer }
+            modifier = modifier.pullRefresh(pullRefreshState)
         ) {
             LazyColumn(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .semantics {
+                        testTag = SeriesCollectionTags.SeriesCollectionContainer
+                        collectionInfo = CollectionInfo(rowCount = models.size, columnCount = 1)
+                    },
                 state = listState,
                 contentPadding = PaddingValues(
                     start = 8.dp,
