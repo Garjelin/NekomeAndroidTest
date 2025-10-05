@@ -71,11 +71,3 @@ class CollectionScreen(semanticsProvider: SemanticsNodeInteractionsProvider) :
         }
     }
 }
-
-/**
- * DSL функция для работы с CollectionScreen.
- */
-fun collectionScreen(
-    semanticsProvider: SemanticsNodeInteractionsProvider,
-    block: CollectionScreen.() -> Unit
-) = CollectionScreen(semanticsProvider).apply(block)
