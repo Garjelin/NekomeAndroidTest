@@ -67,6 +67,7 @@ class CollectionScreenTest : BaseComposeTest() {
                         assertContentDescriptionEquals("Refresh series") // res/values/strings.xml
                         assertHasClickAction()
                     }
+
                 }
             }
         }
