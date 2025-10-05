@@ -35,15 +35,4 @@ class LoginScreen(semanticsProvider: SemanticsNodeInteractionsProvider) :
     val errorMessage: KNode = createNode("ErrorMessage")
 }
 
-/**
- * DSL функция для работы с LoginScreen.
- * 
- * @param semanticsProvider провайдер семантики (обычно composeTestRule)
- * @param block блок действий на экране
- */
-fun loginScreen(
-    semanticsProvider: SemanticsNodeInteractionsProvider,
-    block: LoginScreen.() -> Unit
-) = LoginScreen(semanticsProvider).apply(block)
-
 

@@ -32,7 +32,7 @@ class SeriesListRobot(private val composeContentTestRule: ComposeContentTestRule
      */
     fun refreshList() {
         composeContentTestRule
-            .onNodeWithTag(SeriesCollectionTags.RefreshContainer)
+            .onNodeWithTag(SeriesCollectionTags.SeriesCollectionContainer)
             .performTouchInput {
                 swipeDown()
             }
@@ -104,7 +104,7 @@ class SeriesListResultRobot(private val composeContentTestRule: ComposeContentTe
      */
     fun isListDisplayed() {
         composeContentTestRule
-            .onNodeWithTag(SeriesCollectionTags.RefreshContainer)
+            .onNodeWithTag(SeriesCollectionTags.SeriesCollectionContainer)
             .assertIsDisplayed()
     }
 

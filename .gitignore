@@ -154,3 +154,21 @@ test_local.sh
 # debug_notes.md
 # temp_*.md
 
+# ============================================
+# Marathon Test Runner
+# ============================================
+
+# Marathon binary и библиотеки (не нужны в репозитории)
+marathon-*/
+marathon*.zip
+
+# Результаты тестов Marathon
+marathon/
+
+# Сохраняем только конфигурацию и скрипты Marathon:
+# - Marathonfile.Local (конфигурация)
+# - run_marathon.sh (скрипт запуска)
+# - marathon_quick.sh (быстрый запуск)
+# - test_marathon.sh (проверка настройки)
+# - *.md файлы с документацией
+

@@ -54,6 +54,7 @@
     <string name="title_language_japanese">Japanese</string>
 
     <string name="series_list_length">%s / %s</string>
+    <string name="series_list_poster">Series poster image</string>
     <string name="series_list_plus_one">+1</string>
     <string name="series_list_date_range">%s - %s</string>
     <string name="series_list_unknown">Unknown</string>

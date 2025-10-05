@@ -1,0 +1,37 @@
+name: "Nekome"
+outputDir: "./marathon"
+isCodeCoverageEnabled: true
+shardingStrategy:
+  type: "count"
+  count: 1
+retryStrategy:
+  type: "no-retry"
+filteringConfiguration:
+    allowlist:
+      - type: "annotation"
+        values:
+          - "com.chesire.nekome.helpers.annotations.Debug"
+vendorConfiguration:
+  type: "Android"
+  vendor: ADAM
+  serialStrategy: "automatic"
+  androidSdk: "/Users/admin/Library/Android/sdk"
+  applicationApk: "./app/build/outputs/apk/debug/app-debug.apk"
+  testApplicationApk: "./app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk"
+  installOptions: "-t"
+  autoGrantPermission: true
+  waitForDevicesTimeoutMillis: 60000
+  fileSyncConfiguration:
+    pull:
+      - relativePath: "files/allure-results"
+        aggregationMode: TEST_RUN
+  screenRecordConfiguration:
+    preferableRecorderType: "screenshot"
+    videoConfiguration:
+      enabled: false
+    screenshotConfiguration:
+      enabled: false
+  allureConfiguration:
+    enabled: true
+ignoreFailures: true
+debug: true

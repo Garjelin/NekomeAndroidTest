@@ -14,8 +14,9 @@ class Login(
 ) : Scenario() {
 
     override val steps: TestContext<Unit>.() -> Unit = {
-        ActivityScenario.launch(MainActivity::class.java)
 
+        ActivityScenario.launch(MainActivity::class.java)
+        Thread.sleep(2000) // задержка для прогрузки приложения
         val loginScreen = LoginScreen(semanticsProvider)
 
         step("Ввести email: ${user.login}") {

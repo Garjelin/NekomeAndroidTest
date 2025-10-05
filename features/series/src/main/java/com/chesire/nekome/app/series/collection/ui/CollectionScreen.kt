@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
@@ -63,6 +64,8 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.CollectionInfo
+import androidx.compose.ui.semantics.collectionInfo
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.style.TextAlign
@@ -131,7 +134,10 @@ private fun Render(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(text = stringResource(id = state.value.screenTitle))
+                    Text(
+                        text = stringResource(id = state.value.screenTitle),
+                        modifier = Modifier.semantics { testTag = SeriesCollectionTags.AppBarTitle }
+                    )
                 },
                 actions = {
                     IconButton(
@@ -180,7 +186,10 @@ private fun Render(
             ) {
                 ExtendedFloatingActionButton(
                     text = {
-                        Text(text = stringResource(id = StringResource.series_list_search_fab_text))
+                        Text(
+                            text = stringResource(id = StringResource.series_list_search_fab_text),
+                            modifier = Modifier.semantics { testTag = SeriesCollectionTags.SearchFabTitle },
+                        )
                     },
                     icon = {
                         Icon(
@@ -248,12 +257,15 @@ private fun SeriesCollection(
             onRefresh = onRefresh
         )
         Box(
-            modifier = modifier
-                .pullRefresh(pullRefreshState)
-                .semantics { testTag = SeriesCollectionTags.RefreshContainer }
+            modifier = modifier.pullRefresh(pullRefreshState)
         ) {
             LazyColumn(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .semantics {
+                        testTag = SeriesCollectionTags.SeriesCollectionContainer
+                        collectionInfo = CollectionInfo(rowCount = models.size, columnCount = 1)
+                    },
                 state = listState,
                 contentPadding = PaddingValues(
                     start = 8.dp,
@@ -263,12 +275,13 @@ private fun SeriesCollection(
                 ),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                items(
+                itemsIndexed(
                     items = models,
-                    key = { it.userId }
-                ) {
+                    key = { _, item -> item.userId }
+                ) { index, item ->
                     SeriesItem(
-                        model = it,
+                        index = index,
+                        model = item,
                         onSelectSeries = onSelectSeries,
                         onIncrementSeries = onIncrementSeries
                     )
@@ -298,6 +311,7 @@ private fun SeriesCollection(
 
 @Composable
 private fun SeriesItem(
+    index: Int,
     model: Series,
     onSelectSeries: (Series) -> Unit,
     onIncrementSeries: (Series) -> Unit
@@ -315,7 +329,7 @@ private fun SeriesItem(
         modifier = Modifier
             .fillMaxWidth()
             .height(125.dp)
-            .semantics { testTag = SeriesCollectionTags.SeriesItem }
+            .semantics { testTag = "${SeriesCollectionTags.SeriesItem}_$index" }
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             if (model.isUpdating) {
@@ -330,11 +344,12 @@ private fun SeriesItem(
                     model = model.posterImageUrl,
                     placeholder = rememberVectorPainter(image = Icons.Default.InsertPhoto),
                     error = rememberVectorPainter(image = Icons.Default.BrokenImage),
-                    contentDescription = null,
+                    contentDescription = stringResource(id = StringResource.series_list_poster),
                     modifier = Modifier
                         .fillMaxHeight()
                         .aspectRatio(0.7f)
-                        .align(Alignment.CenterVertically),
+                        .align(Alignment.CenterVertically)
+                        .semantics { testTag = SeriesCollectionTags.Poster },
                     contentScale = ContentScale.FillBounds
                 )
                 Column(
@@ -394,7 +409,8 @@ private fun SeriesItem(
                                     contentDescription = stringResource(
                                         id = StringResource.series_list_plus_one
                                     ),
-                                    tint = MaterialTheme.colorScheme.primary
+                                    tint = MaterialTheme.colorScheme.primary,
+                                    modifier = Modifier.semantics { testTag = SeriesCollectionTags.PlusOneIcon }
                                 )
                             }
                         }
@@ -539,11 +555,15 @@ private fun Preview() {
 object SeriesCollectionTags {
     const val Root = "SeriesCollectionRoot"
     const val EmptyView = "SeriesCollectionEmptyView"
-    const val RefreshContainer = "SeriesCollectionRefreshContainer"
+    const val SeriesCollectionContainer = "SeriesCollectionContainer"
     const val SearchFab = "SeriesCollectionSearchFab"
+    const val SearchFabTitle = "SeriesCollectionSearchFabTitle"
     const val SeriesItem = "SeriesCollectionSeriesItem"
+    const val Poster = "SeriesCollectionPoster"
     const val PlusOne = "SeriesCollectionPlusOne"
+    const val PlusOneIcon = "SeriesCollectionPlusOneIcon"
     const val Snackbar = "SeriesCollectionSnackbar"
+    const val AppBarTitle = "SeriesCollectionAppBarTitle"
     const val MenuFilter = "SeriesCollectionMenuFilter"
     const val MenuSort = "SeriesCollectionMenuSort"
     const val MenuRefresh = "SeriesCollectionRefresh"
