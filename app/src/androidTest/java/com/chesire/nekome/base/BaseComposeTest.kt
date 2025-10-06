@@ -11,6 +11,8 @@ import com.chesire.nekome.core.preferences.SeriesPreferences
 import com.chesire.nekome.datasource.auth.local.AuthProvider
 import com.chesire.nekome.helpers.logout
 import com.chesire.nekome.helpers.reset
+import com.chesire.nekome.pageobjects.CollectionScreen
+import com.chesire.nekome.pageobjects.ItemScreen
 import com.chesire.nekome.pageobjects.LoginScreen
 import com.chesire.nekome.ui.MainActivity
 import com.kaspersky.kaspresso.kaspresso.Kaspresso
@@ -85,27 +87,13 @@ abstract class BaseComposeTest : TestCase(
     @Inject
     lateinit var seriesPreferences: SeriesPreferences
 
-    /**
-     * Page Object для экрана логина.
-     * Использование в DSL стиле:
-     * ```
-     * LoginScreen {
-     *     loginButton {
-     *         flakySafely {
-     *             assertIsDisplayed()
-     *         }
-     *     }
-     * }
-     * ```
-     */
     protected val LoginScreen: LoginScreen by lazy { LoginScreen(composeTestRule) }
 
     /**
      * Page Object для экрана коллекции серий (Anime/Manga).
      */
-    protected val CollectionScreen: com.chesire.nekome.pageobjects.CollectionScreen by lazy {
-        com.chesire.nekome.pageobjects.CollectionScreen(composeTestRule)
-    }
+    protected val CollectionScreen: CollectionScreen by lazy { CollectionScreen(composeTestRule) }
+    protected val ItemScreen: ItemScreen by lazy { ItemScreen(composeTestRule) }
 
     /**
      * Инициализация Hilt и очистка состояния перед каждым тестом.
@@ -145,17 +133,6 @@ abstract class BaseComposeTest : TestCase(
         composeTestRule.waitUntil(millis + 1000) {
             System.currentTimeMillis() - startTime >= millis
         }
-    }
-
-    /**
-     * Вывести семантическое дерево Compose в логи.
-     * Полезно для отладки.
-     * 
-     * @param tag тег для фильтрации логов
-     */
-    protected fun printSemanticTree(tag: String = "SemanticTree") {
-        composeTestRule.onRoot(useUnmergedTree = true)
-            .printToLog(tag)
     }
 
     /**

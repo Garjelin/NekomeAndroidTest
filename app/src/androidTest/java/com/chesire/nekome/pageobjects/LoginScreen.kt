@@ -5,24 +5,6 @@ import com.chesire.nekome.app.login.credentials.ui.CredentialsTags
 import com.chesire.nekome.base.BaseComposeScreen
 import io.github.kakaocup.compose.node.element.KNode
 
-/**
- * Page Object для экрана логина.
- * 
- * Использование в тестах:
- * ```kotlin
- * LoginScreen(composeTestRule) {
- *     usernameField {
- *         performTextInput("test@example.com")
- *     }
- *     passwordField {
- *         performTextInput("password123")
- *     }
- *     loginButton {
- *         performClick()
- *     }
- * }
- * ```
- */
 class LoginScreen(semanticsProvider: SemanticsNodeInteractionsProvider) :
     BaseComposeScreen<LoginScreen>(semanticsProvider) {
 

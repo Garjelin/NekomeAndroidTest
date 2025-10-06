@@ -40,17 +40,6 @@ class CollectionScreen(semanticsProvider: SemanticsNodeInteractionsProvider) :
         )
     }
 
-    /**
-     * Helper для работы с коллекцией серий.
-     * Инкапсулирует KNode и методы для работы с размером.
-     * 
-     * Использование:
-     * ```kotlin
-     * seriesCollection.container.assertIsDisplayed()
-     * seriesCollection.getSize()
-     * seriesCollection.assertSize(10)
-     * ```
-     */
     inner class SeriesCollectionHelper {
         val container: KNode = createNode(SeriesCollectionTags.SeriesCollectionContainer)
 
