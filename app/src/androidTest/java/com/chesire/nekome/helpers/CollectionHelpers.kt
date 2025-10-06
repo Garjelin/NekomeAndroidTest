@@ -4,6 +4,8 @@ import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.semantics.getOrNull
 import androidx.compose.ui.test.SemanticsNodeInteractionsProvider
 import androidx.compose.ui.test.hasTestTag
+import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.uiautomator.UiDevice
 import io.github.kakaocup.compose.node.element.KNode
 
 /**
@@ -85,5 +87,13 @@ fun SemanticsNodeInteractionsProvider.assertCollectionEmpty(testTag: String) {
     assert(count == 0) {
         "Expected collection with tag '$testTag' to be empty, but it has $count items"
     }
+}
+
+/**
+ * Нажать на кнопку "Назад", чтобы сэмулировать закрытие клавиатуры
+ */
+fun closeKeyboard() {
+    val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+    device.pressBack() // Эмулирует нажатие кнопки "Назад"
 }
 

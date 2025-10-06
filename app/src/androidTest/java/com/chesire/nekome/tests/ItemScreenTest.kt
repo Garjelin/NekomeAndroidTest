@@ -101,7 +101,6 @@ class ItemScreenTest : BaseComposeTest() {
                 progressInput {
                     flakySafely(10_000) { assertIsDisplayed() }
                 }
-                printSemanticTreeByTag(ItemScreenTags.ProgressInput)
                 outlinedTextField {
                     flakySafely(10_000) {
                         assertIsDisplayed()

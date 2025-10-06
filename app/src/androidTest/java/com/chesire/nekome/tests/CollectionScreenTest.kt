@@ -1,20 +1,11 @@
 package com.chesire.nekome.tests
 
-import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.semantics.SemanticsProperties
-import androidx.compose.ui.semantics.getOrNull
-import androidx.compose.ui.test.SemanticsMatcher
-import androidx.compose.ui.test.hasAnyAncestor
-import androidx.compose.ui.test.hasTestTag
-import androidx.compose.ui.test.hasText
-import androidx.compose.ui.text.AnnotatedString
-import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.chesire.nekome.app.series.item.ui.ItemScreenTags
 import com.chesire.nekome.base.BaseComposeTest
 import com.chesire.nekome.helpers.Users.TEST_USER_1
 import com.chesire.nekome.helpers.annotations.Debug
 import com.chesire.nekome.helpers.assertTextMatches
+import com.chesire.nekome.helpers.closeKeyboard
 import com.chesire.nekome.helpers.getText
 import com.chesire.nekome.helpers.scenario.Login
 import com.kaspersky.kaspresso.annotations.Regression
@@ -190,7 +181,6 @@ class CollectionScreenTest : BaseComposeTest() {
                         flakySafely(10_000) {
                             assertIsDisplayed()
                         }
-                        // Получаем текст элемента
                         seriesTitle = getText()
                         performClick()
                     }
@@ -203,6 +193,78 @@ class CollectionScreenTest : BaseComposeTest() {
                     flakySafely(10_000) {
                         assertIsDisplayed()
                         assertTextEquals(seriesTitle)
+                    }
+                }
+            }
+        }
+    }
+
+    @Test
+    @Regression
+    @Link(name = "Тест-кейс", url = "https://testrail.bcs.ru/testrail/index.php?/cases/view/60786872")
+    @DisplayName("Увеличение счётчика прогресса")
+    fun increasingProgressCounter() = run {
+        scenario(Login(TEST_USER_1, composeTestRule))
+        var progressValue: Pair<Int, Int>? = null
+        step("Проверить элементы первой карточки серии") {
+            CollectionScreen {
+                seriesItem(0) {
+                    var progressValueText = ""
+                    progress {
+                        flakySafely(10_000) {
+                            assertIsDisplayed()
+                            assertTextMatches(Regex("""\d+ / \d+"""))
+                        }
+                        progressValueText = getText()
+                    }
+                    val progressValueList = progressValueText.split(" / ")
+                    progressValue = Pair(progressValueList[0].toInt(), progressValueList[1].toInt())
+                    // Иконка +1
+                    plusOneButton {
+                        flakySafely(10_000) { assertIsDisplayed() }
+                        performClick()
+                    }
+                    progress {
+                        flakySafely(10_000) {
+                            assertIsDisplayed()
+                            assertTextEquals((progressValue.first + 1).toString() + " / " + progressValue.second.toString())
+                        }
+                    }
+                }
+            }
+        }
+        step("Возврат в исходное состояние") {
+            CollectionScreen {
+                seriesItem(0) {
+                    title {
+                        flakySafely(10_000) {
+                            assertIsDisplayed()
+                        }
+                        performClick()
+                    }
+                }
+            }
+            ItemScreen {
+                outlinedTextField {
+                    flakySafely(10_000) { assertIsDisplayed() }
+                    performTextReplacement(progressValue?.first.toString())
+                }
+                closeKeyboard()
+                confirmButton {
+                    flakySafely(10_000) {
+                        assertIsDisplayed()
+                        assertTextEquals("Confirm")
+                    }
+                    performClick()
+                }
+            }
+            CollectionScreen {
+                seriesItem(0) {
+                    progress {
+                        flakySafely(10_000) {
+                            assertIsDisplayed()
+                            assertTextEquals((progressValue?.first).toString() + " / " + progressValue?.second.toString())
+                        }
                     }
                 }
             }
