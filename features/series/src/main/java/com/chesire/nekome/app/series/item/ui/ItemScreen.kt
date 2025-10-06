@@ -54,6 +54,9 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -114,7 +117,8 @@ private fun Render(
                         onClick = {
                             finishScreen()
                             onFinishedScreen()
-                        }
+                        },
+                        modifier = Modifier.semantics { testTag = ItemScreenTags.BackButton }
                     ) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
@@ -123,7 +127,10 @@ private fun Render(
                     }
                 },
                 actions = {
-                    IconButton(onClick = onDeletePressed) {
+                    IconButton(
+                        onClick = onDeletePressed,
+                        modifier = Modifier.semantics { testTag = ItemScreenTags.DeleteButton }
+                    ) {
                         Icon(
                             imageVector = Icons.Default.Delete,
                             contentDescription = stringResource(
@@ -219,6 +226,7 @@ private fun HeaderArea(
                         it.size.height.toDp()
                     }
                 }
+                .semantics { testTag = ItemScreenTags.SeriesImage }
         )
         Column(
             modifier = Modifier
@@ -227,8 +235,12 @@ private fun HeaderArea(
                 .verticalFadingEdge(scrollState, 32.dp)
                 .verticalScroll(scrollState)
         ) {
-            Title(title = title)
-            Subtitle(subtitle = subtitle)
+            Title(
+                title = title
+            )
+            Subtitle(
+                subtitle = subtitle,
+            )
         }
     }
 }
@@ -238,7 +250,9 @@ private fun Title(title: String) {
     Text(
         text = title,
         style = MaterialTheme.typography.headlineSmall,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
+            .semantics { testTag = ItemScreenTags.Title }
     )
 }
 
@@ -247,7 +261,9 @@ private fun Subtitle(subtitle: String) {
     Text(
         text = subtitle,
         style = MaterialTheme.typography.bodySmall,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
+            .semantics { testTag = ItemScreenTags.Subtitle }
     )
 }
 
@@ -275,7 +291,9 @@ private fun SeriesStatus(
 ) {
     Text(
         text = stringResource(id = StringResource.series_detail_status_title),
-        modifier = Modifier.padding(top = 16.dp),
+        modifier = Modifier
+            .padding(top = 16.dp)
+            .semantics { testTag = ItemScreenTags.SeriesStatusTitle },
         style = MaterialTheme.typography.bodyLarge
     )
     FlowRow(
@@ -284,6 +302,7 @@ private fun SeriesStatus(
             .fillMaxWidth()
             .wrapContentHeight()
             .padding(horizontal = 8.dp)
+            .semantics { testTag = ItemScreenTags.SeriesStatusChips },
     ) {
         possibleSeriesStatus.forEach { seriesChip ->
             FilterChip(
@@ -306,19 +325,25 @@ private fun Progress(
 ) {
     Text(
         text = stringResource(id = StringResource.series_detail_progress_title),
-        modifier = Modifier.padding(top = 16.dp, bottom = 8.dp),
+        modifier = Modifier
+            .padding(top = 16.dp, bottom = 8.dp)
+            .semantics { testTag = ItemScreenTags.ProgressTitle },
         style = MaterialTheme.typography.bodyLarge
     )
     OutlinedTextField(
         value = progress,
         onValueChange = onProgressChanged,
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .semantics { testTag = ItemScreenTags.ProgressInput },
         trailingIcon = {
             Text(
-                text = stringResource(
-                    id = StringResource.series_detail_progress_out_of,
-                    length
-                )
+                text = stringResource(id = StringResource.series_detail_progress_out_of, length),
+//                modifier = Modifier.semantics { testTag = ItemScreenTags.ProgressOutOf },
+                modifier = Modifier.semantics {
+                    contentDescription = ItemScreenTags.ProgressOutOf
+                    testTag = ItemScreenTags.ProgressOutOf
+                }
             )
         },
         singleLine = true,
@@ -333,7 +358,9 @@ private fun Rating(
 ) {
     Text(
         text = stringResource(id = StringResource.series_detail_rating),
-        modifier = Modifier.padding(top = 16.dp),
+        modifier = Modifier
+            .padding(top = 16.dp)
+            .semantics { testTag = ItemScreenTags.RatingTitle },
         style = MaterialTheme.typography.bodyLarge
     )
     Slider(
@@ -349,7 +376,9 @@ private fun Rating(
         },
         valueRange = 1f..20f,
         steps = 18,
-        modifier = Modifier.padding(horizontal = 8.dp)
+        modifier = Modifier
+            .padding(horizontal = 8.dp)
+            .semantics { testTag = ItemScreenTags.RatingSlider },
     )
 
     Text(
@@ -358,7 +387,9 @@ private fun Rating(
         } else {
             (round(rating) / 2.0).toString()
         },
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .semantics { testTag = ItemScreenTags.RatingValue },
         textAlign = TextAlign.Center
     )
 }
@@ -377,7 +408,9 @@ private fun ConfirmButton(
                 keyboardController?.hide()
             }
         },
-        modifier = Modifier.padding(start = 16.dp, top = 32.dp, end = 16.dp, bottom = 0.dp),
+        modifier = Modifier
+            .padding(start = 16.dp, top = 32.dp, end = 16.dp, bottom = 0.dp)
+            .semantics { testTag = ItemScreenTags.ConfirmButton },
         contentPadding = PaddingValues(horizontal = 48.dp, vertical = 16.dp)
     ) {
         Text(text = stringResource(id = StringResource.series_detail_confirm))
@@ -463,4 +496,27 @@ private fun Preview() {
             onFinishedScreen = { /**/ }
         )
     }
+}
+
+object ItemScreenTags {
+    const val BackButton = "back_button"
+    const val DeleteButton = "delete_button"
+    const val Title = "title"
+    const val Subtitle = "subtitle"
+    const val SeriesImage = "series_image"
+    const val SeriesStatusTitle = "series_status_title"
+    const val SeriesStatusChips = "series_status_chips"
+    const val SeriesStatusChip = "series_status_chip"
+    const val ProgressTitle = "progress_title"
+    const val ProgressInput = "progress_input"
+    const val ProgressOutOf = "progress_out_of"
+    const val RatingTitle = "rating_title"
+    const val RatingSlider = "rating_slider"
+    const val RatingValue = "rating_value"
+    const val ConfirmButton = "confirm_button"
+    const val LoadingIndicator = "loading_indicator"
+    const val Snackbar = "snackbar"
+    const val DeleteDialog = "delete_dialog"
+    const val DeleteDialogConfirm = "delete_dialog_confirm"
+    const val DeleteDialogCancel = "delete_dialog_cancel"
 }

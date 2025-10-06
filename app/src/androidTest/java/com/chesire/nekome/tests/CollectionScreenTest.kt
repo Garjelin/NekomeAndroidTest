@@ -1,10 +1,21 @@
 package com.chesire.nekome.tests
 
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.semantics.getOrNull
+import androidx.compose.ui.test.SemanticsMatcher
+import androidx.compose.ui.test.hasAnyAncestor
+import androidx.compose.ui.test.hasTestTag
+import androidx.compose.ui.test.hasText
+import androidx.compose.ui.text.AnnotatedString
+import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.chesire.nekome.app.series.item.ui.ItemScreenTags
 import com.chesire.nekome.base.BaseComposeTest
 import com.chesire.nekome.helpers.Users.TEST_USER_1
 import com.chesire.nekome.helpers.annotations.Debug
 import com.chesire.nekome.helpers.assertTextMatches
+import com.chesire.nekome.helpers.getText
 import com.chesire.nekome.helpers.scenario.Login
 import com.kaspersky.kaspresso.annotations.Regression
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -26,11 +37,13 @@ import org.junit.runner.RunWith
 @Story("Главная страница")
 class CollectionScreenTest : BaseComposeTest() {
 
+
+
     @Test
     @Regression
     @Link(name = "Тест-кейс", url = "https://testrail.bcs.ru/testrail/index.php?/cases/view/60786871")
     @DisplayName("Отображение элементов страницы Anime")
-    fun checkAllCollectionScreenElements() = run {
+    fun displayingAnimePageElements() = run {
         scenario(Login(TEST_USER_1, composeTestRule))
         step("Проверка TopBar") {
             CollectionScreen {
@@ -115,8 +128,8 @@ class CollectionScreenTest : BaseComposeTest() {
     @Test
     @Regression
     @Link(name = "Тест-кейс", url = "https://testrail.bcs.ru/testrail/index.php?/cases/view/60786872")
-    @DisplayName("Отображение элементов карточки серии")
-    fun checkSeriesCardElements() = run {
+    @DisplayName("Отображение элементов карточки")
+    fun displayingCardElements() = run {
         scenario(Login(TEST_USER_1, composeTestRule))
         step("Проверить элементы первой карточки серии") {
             CollectionScreen {
@@ -154,6 +167,42 @@ class CollectionScreenTest : BaseComposeTest() {
                         flakySafely(10_000) {
                             assertIsDisplayed()
                         }
+                    }
+                }
+            }
+        }
+    }
+
+    @Test
+    @Regression
+    @Link(
+        name = "Тест-кейс",
+        url = "https://testrail.bcs.ru/testrail/index.php?/cases/view/60786873"
+    )
+    @DisplayName("Переход на детальную карточку")
+    fun displayingElementsOfDetailedCard() = run {
+        scenario(Login(TEST_USER_1, composeTestRule))
+        var seriesTitle = ""
+        step("Переход на детальную карточку") {
+            CollectionScreen {
+                seriesItem(0) {
+                    title {
+                        flakySafely(10_000) {
+                            assertIsDisplayed()
+                        }
+                        // Получаем текст элемента
+                        seriesTitle = getText()
+                        performClick()
+                    }
+                }
+            }
+        }
+        step("Проверка Header") {
+            ItemScreen {
+                title {
+                    flakySafely(10_000) {
+                        assertIsDisplayed()
+                        assertTextEquals(seriesTitle)
                     }
                 }
             }

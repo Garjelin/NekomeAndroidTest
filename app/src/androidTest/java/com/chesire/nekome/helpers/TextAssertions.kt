@@ -5,6 +5,7 @@ import androidx.compose.ui.semantics.getOrNull
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assert
 import io.github.kakaocup.compose.node.assertion.NodeAssertions
+import io.github.kakaocup.compose.node.element.KNode
 
 //Проверяет, что текст элемента соответствует заданному regex паттерну.
 //
@@ -28,4 +29,32 @@ fun NodeAssertions.assertTextMatches(
         regex.matches(actualText)
     }
     assert(matcher)
+}
+
+/**
+ * Получает текст из Compose элемента.
+ * 
+ * Пример использования:
+ * ```kotlin
+ * val titleText = title.getText()
+ * // или с проверкой на null:
+ * val titleText = title.getText() ?: "Default text"
+ * ```
+ * 
+ * @return текст элемента или null, если текст отсутствует
+ */
+fun KNode.getText(): String {
+    var result: String? = null
+    val matcher = SemanticsMatcher("Get text") { node ->
+        result = node.config.getOrNull(SemanticsProperties.Text)
+            ?.firstOrNull()
+            ?.text
+        true // всегда возвращаем true, чтобы не вызвать ошибку assert
+    }
+    try {
+        assert(matcher)
+    } catch (e: Exception) {
+        // Игнорируем ошибки, нам нужен только текст
+    }
+    return result ?: "" // Возвращаем пустую строку, если текст null
 }
