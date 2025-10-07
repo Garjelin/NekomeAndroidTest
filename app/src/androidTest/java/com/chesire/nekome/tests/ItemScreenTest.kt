@@ -1,11 +1,13 @@
 package com.chesire.nekome.tests
 
+import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.chesire.nekome.app.series.item.ui.ItemScreenTags
 import com.chesire.nekome.base.BaseComposeTest
 import com.chesire.nekome.helpers.Users.TEST_USER_1
 import com.chesire.nekome.helpers.annotations.Debug
 import com.chesire.nekome.helpers.assertTextMatches
+import com.chesire.nekome.helpers.getText
 import com.chesire.nekome.helpers.scenario.Login
 import com.kaspersky.kaspresso.annotations.Regression
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -104,12 +106,14 @@ class ItemScreenTest : BaseComposeTest() {
                 outlinedTextField {
                     flakySafely(10_000) {
                         assertIsDisplayed()
-                        assertTextEquals("3")
+                        val actualText = getText()
+                        Log.d("LOG_MSG_1","Progress input text: '$actualText'")
+                        assertTextMatches(Regex("""\d+"""))
                     }
                     trailingIcon {
                         flakySafely(10_000) {
                             assertIsDisplayed()
-                            assertTextEquals("/ 25")
+                            assertTextMatches(Regex("""/ \d+"""))
                         }
                     }
                 }

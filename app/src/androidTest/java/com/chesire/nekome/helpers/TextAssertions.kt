@@ -23,13 +23,17 @@ import io.github.kakaocup.compose.node.element.KNode
 //
 //@param regex паттерн для проверки текста
 
-fun NodeAssertions.assertTextMatches(
-    regex: Regex
-) {
+fun NodeAssertions.assertTextMatches(regex: Regex) {
     val matcher = SemanticsMatcher("Text matches pattern '${regex.pattern}'") { node ->
+        // Проверяем EditableText для редактируемых полей
+        val editableText = node.config.getOrNull(SemanticsProperties.EditableText)
+        // Проверяем Text для обычных текстовых элементов
         val textValues = node.config.getOrNull(SemanticsProperties.Text)
-        val actualText = textValues?.joinToString("") { it.text } ?: ""
-        
+        val actualText = when {
+            editableText != null -> editableText
+            textValues != null -> textValues.joinToString("") { it.text }
+            else -> ""
+        }
         regex.matches(actualText)
     }
     assert(matcher)

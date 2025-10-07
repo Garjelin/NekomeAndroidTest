@@ -31,6 +31,95 @@ class ItemScreenProgressBlockTest : BaseComposeTest() {
     @Test
     @Regression
     @Link(name = "Тест-кейс", url = "https://testrail.bcs.ru/testrail/index.php?/cases/view/60786872")
+    @DisplayName("Ввод корректного значения")
+    fun enteringCorrectValue() = run {
+        scenario(Login(TEST_USER_1, composeTestRule))
+        var progressValue: Pair<Int, Int>? = null
+        step("Сохранить значения Прогресса") {
+            CollectionScreen {
+                seriesItem(0) {
+                    var progressValueText = ""
+                    progress {
+                        flakySafely(10_000) {
+                            assertIsDisplayed()
+                            assertTextMatches(Regex("""\d+ / \d+"""))
+                        }
+                        progressValueText = getText()
+                    }
+                    val progressValueList = progressValueText.split(" / ")
+                    progressValue = Pair(progressValueList[0].toInt(), progressValueList[1].toInt())
+                }
+            }
+        }
+        step("Переход на детальную карточку") {
+            CollectionScreen {
+                seriesItem(0) {
+                    title {
+                        flakySafely(10_000) {
+                            assertIsDisplayed()
+                        }
+                        performClick()
+                    }
+                }
+            }
+        }
+        step("Ввод значения") {
+            ItemScreen {
+                outlinedTextField {
+                    flakySafely(10_000) { assertIsDisplayed() }
+                    performTextReplacement((progressValue!!.second - 1).toString())
+                }
+                closeKeyboard()
+                confirmButton {
+                    flakySafely(10_000) {
+                        assertIsDisplayed()
+                        assertTextEquals("Confirm")
+                    }
+                    performClick()
+                }
+            }
+        }
+        step("Проверяем что значение сохранилось в блоке Прогресс") {
+            CollectionScreen {
+                seriesItem(0) {
+                    title {
+                        flakySafely(10_000) {
+                            assertIsDisplayed()
+                        }
+                        performClick()
+                    }
+                }
+            }
+            ItemScreen {
+                outlinedTextField {
+                    flakySafely(10_000) {
+                        assertIsDisplayed()
+                        assertTextEquals((progressValue!!.second - 1).toString())
+                    }
+                }
+            }
+        }
+        step("Возврат в исходное состояние") {
+            ItemScreen {
+                outlinedTextField {
+                    flakySafely(10_000) { assertIsDisplayed() }
+                    performTextReplacement(progressValue?.first.toString())
+                }
+                closeKeyboard()
+                confirmButton {
+                    flakySafely(10_000) {
+                        assertIsDisplayed()
+                        assertTextEquals("Confirm")
+                    }
+                    performClick()
+                }
+            }
+        }
+    }
+
+    @Test
+    @Regression
+    @Link(name = "Тест-кейс", url = "https://testrail.bcs.ru/testrail/index.php?/cases/view/60786872")
     @DisplayName("Ввод некорректного значения (больше допустимого)")
     fun enteringIncorrectValueGreaterThanAllowedValue() = run {
         scenario(Login(TEST_USER_1, composeTestRule))
