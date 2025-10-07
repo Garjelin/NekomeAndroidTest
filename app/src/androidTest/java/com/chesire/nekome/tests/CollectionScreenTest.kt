@@ -206,7 +206,7 @@ class CollectionScreenTest : BaseComposeTest() {
     fun increasingProgressCounter() = run {
         scenario(Login(TEST_USER_1, composeTestRule))
         var progressValue: Pair<Int, Int>? = null
-        step("Проверить элементы первой карточки серии") {
+        step("Сохранить значения Прогресса и нажать на кнопку '+1'") {
             CollectionScreen {
                 seriesItem(0) {
                     var progressValueText = ""

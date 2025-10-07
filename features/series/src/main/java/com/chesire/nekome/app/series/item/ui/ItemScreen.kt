@@ -142,7 +142,10 @@ private fun Render(
             )
         },
         snackbarHost = {
-            SnackbarHost(hostState = snackbarHostState)
+            SnackbarHost(
+                hostState = snackbarHostState,
+                modifier = Modifier.semantics { testTag = ItemScreenTags.Snackbar }
+            )
         }
     ) { paddingValues ->
         Column(
