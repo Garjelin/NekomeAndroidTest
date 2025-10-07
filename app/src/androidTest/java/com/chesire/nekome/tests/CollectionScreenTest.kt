@@ -1,6 +1,12 @@
 package com.chesire.nekome.tests
 
+import androidx.compose.ui.state.ToggleableState
+import androidx.compose.ui.test.assertIsOff
+import androidx.compose.ui.test.assertIsOn
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.glance.semantics.SemanticsProperties
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.chesire.nekome.app.series.collection.ui.FilterTags
 import com.chesire.nekome.base.BaseComposeTest
 import com.chesire.nekome.helpers.Users.TEST_USER_1
 import com.chesire.nekome.helpers.annotations.Debug
@@ -267,6 +273,146 @@ class CollectionScreenTest : BaseComposeTest() {
                         }
                     }
                 }
+            }
+        }
+    }
+
+    @Test
+    @Regression
+    @Link(name = "Тест-кейс", url = "https://testrail.bcs.ru/testrail/index.php?/cases/view/60786872")
+    @DisplayName("Карточка исчезает при достижении максимального прогресса")
+    fun cardDisappearsWhenMaximumProgressIsReached() = run {
+        scenario(Login(TEST_USER_1, composeTestRule))
+        var progressValue: Pair<Int, Int>? = null
+        step("Сохранить значения Прогресса") {
+            CollectionScreen {
+                seriesItem(0) {
+                    var progressValueText = ""
+                    progress {
+                        flakySafely(10_000) {
+                            assertIsDisplayed()
+                            assertTextMatches(Regex("""\d+ / \d+"""))
+                        }
+                        progressValueText = getText()
+                    }
+                    val progressValueList = progressValueText.split(" / ")
+                    progressValue = Pair(progressValueList[0].toInt(), progressValueList[1].toInt())
+                }
+            }
+        }
+        step("Переход на детальную карточку") {
+            CollectionScreen {
+                seriesItem(0) {
+                    title {
+                        flakySafely(10_000) {
+                            assertIsDisplayed()
+                        }
+                        performClick()
+                    }
+                }
+            }
+        }
+        step("Ввод значения") {
+            ItemScreen {
+                outlinedTextField {
+                    flakySafely(10_000) { assertIsDisplayed() }
+                    performTextReplacement((progressValue!!.second - 1).toString())
+                }
+                closeKeyboard()
+                confirmButton {
+                    flakySafely(10_000) {
+                        assertIsDisplayed()
+                        assertTextEquals("Confirm")
+                    }
+                    performClick()
+                }
+            }
+        }
+        step("Проверяем переход на главный экран Анимэ") {
+            CollectionScreen {
+                seriesItem(0) {
+                    title {
+                        flakySafely(10_000) {
+                            assertIsDisplayed()
+                        }
+                    }
+                }
+            }
+        }
+        step("Нажать на кнопку '+1'") {
+            CollectionScreen {
+                seriesItem(0) {
+                    // Иконка +1
+                    plusOneButton {
+                        flakySafely(10_000) { assertIsDisplayed() }
+                        performClick()
+                    }
+                }
+            }
+        }
+        waitForTime(10_000)
+        step("Возврат в исходное состояние") {
+            CollectionScreen {
+                seriesItem(0) {
+                    title {
+                        flakySafely(10_000) {
+                            assertIsDisplayed()
+                        }
+                        performClick()
+                    }
+                }
+            }
+            ItemScreen {
+                outlinedTextField {
+                    flakySafely(10_000) { assertIsDisplayed() }
+                    performTextReplacement(progressValue?.first.toString())
+                }
+                closeKeyboard()
+                confirmButton {
+                    flakySafely(10_000) {
+                        assertIsDisplayed()
+                        assertTextEquals("Confirm")
+                    }
+                    performClick()
+                }
+            }
+            CollectionScreen {
+                seriesItem(0) {
+                    progress {
+                        flakySafely(10_000) {
+                            assertIsDisplayed()
+                            assertTextEquals((progressValue?.first).toString() + " / " + progressValue?.second.toString())
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @Test
+    @Regression
+    @Link(name = "Тест-кейс", url = "https://testrail.bcs.ru/testrail/index.php?/cases/view/60786871")
+    @DisplayName("Отображение элементов страницы Anime")
+    fun displayingAnimePageElementsq() = run {
+        scenario(Login(TEST_USER_1, composeTestRule))
+        step("Проверка TopBar") {
+            CollectionScreen {
+                // Кнопка Filter
+                filterButton {
+                    flakySafely(10_000) { assertIsDisplayed() }
+                    performClick()
+                }
+                filterOptionChecked("FilterOptionChecked_Completed").apply {
+                    flakySafely(10_000) {
+                        assertIsDisplayed()
+                        assertIsOff()
+                    }
+                    performClick()
+                    flakySafely(10_000) { assertIsOn() }
+                }
+                waitForTime(3000)
+                printSemanticTreeByTag(FilterTags.Root)
+                // Кнопка Sort
             }
         }
     }

@@ -30,7 +30,10 @@ class ItemScreenProgressBlockTest : BaseComposeTest() {
 
     @Test
     @Regression
-    @Link(name = "Тест-кейс", url = "https://testrail.bcs.ru/testrail/index.php?/cases/view/60786872")
+    @Link(
+        name = "Тест-кейс",
+        url = "https://testrail.bcs.ru/testrail/index.php?/cases/view/60786872"
+    )
     @DisplayName("Ввод корректного значения")
     fun enteringCorrectValue() = run {
         scenario(Login(TEST_USER_1, composeTestRule))
@@ -79,7 +82,7 @@ class ItemScreenProgressBlockTest : BaseComposeTest() {
                 }
             }
         }
-        step("Проверяем что значение сохранилось в блоке Прогресс") {
+        step("Проверяем переход на главный экран Анимэ") {
             CollectionScreen {
                 seriesItem(0) {
                     title {
@@ -90,6 +93,8 @@ class ItemScreenProgressBlockTest : BaseComposeTest() {
                     }
                 }
             }
+        }
+        step("Проверяем что значение сохранилось в блоке Прогресс") {
             ItemScreen {
                 outlinedTextField {
                     flakySafely(10_000) {
@@ -119,7 +124,10 @@ class ItemScreenProgressBlockTest : BaseComposeTest() {
 
     @Test
     @Regression
-    @Link(name = "Тест-кейс", url = "https://testrail.bcs.ru/testrail/index.php?/cases/view/60786872")
+    @Link(
+        name = "Тест-кейс",
+        url = "https://testrail.bcs.ru/testrail/index.php?/cases/view/60786872"
+    )
     @DisplayName("Ввод некорректного значения (больше допустимого)")
     fun enteringIncorrectValueGreaterThanAllowedValue() = run {
         scenario(Login(TEST_USER_1, composeTestRule))
@@ -173,6 +181,225 @@ class ItemScreenProgressBlockTest : BaseComposeTest() {
             waitForText("Failed to update", 5000)
             // Проверяем что Snackbar с текстом исчез
             waitForTextNotExist("Failed to update", 5000)
+        }
+        step("Проверяем что мы остались на странице с блоком Прогресс") {
+            ItemScreen {
+                outlinedTextField {
+                    flakySafely(10_000) { assertIsDisplayed() }
+                }
+            }
+        }
+    }
+
+    @Test
+    @Regression
+    @Link(
+        name = "Тест-кейс",
+        url = "https://testrail.bcs.ru/testrail/index.php?/cases/view/60786872"
+    )
+    @DisplayName("Ввод некорректного значения (отрицательное число)")
+    fun enteringIncorrectValueNegativeNumber() = run {
+        scenario(Login(TEST_USER_1, composeTestRule))
+        step("Переход на детальную карточку") {
+            CollectionScreen {
+                seriesItem(0) {
+                    title {
+                        flakySafely(10_000) {
+                            assertIsDisplayed()
+                        }
+                        performClick()
+                    }
+                }
+            }
+        }
+        step("Ввод значения") {
+            val testValue = "-3"
+            ItemScreen {
+                outlinedTextField {
+                    flakySafely(10_000) { assertIsDisplayed() }
+                    performTextReplacement(testValue)
+                }
+                closeKeyboard()
+                confirmButton {
+                    flakySafely(10_000) {
+                        assertIsDisplayed()
+                        assertTextEquals("Confirm")
+                    }
+                    performClick()
+                }
+            }
+        }
+        step("Проверка снекбара") {
+            // Проверка появления Snackbar с текстом - ждем пока появится текст
+            waitForText("Failed to update", 5000)
+            // Проверяем что Snackbar с текстом исчез
+            waitForTextNotExist("Failed to update", 5000)
+        }
+        step("Проверяем что мы остались на странице с блоком Прогресс") {
+            ItemScreen {
+                outlinedTextField {
+                    flakySafely(10_000) { assertIsDisplayed() }
+                }
+            }
+        }
+    }
+
+    @Test
+    @Regression
+    @Link(
+        name = "Тест-кейс",
+        url = "https://testrail.bcs.ru/testrail/index.php?/cases/view/60786872"
+    )
+    @DisplayName("Ввод некорректного значения (дробное через запятую)")
+    fun enteringIncorrectValueFractionalSeparatedByComma() = run {
+        scenario(Login(TEST_USER_1, composeTestRule))
+        step("Переход на детальную карточку") {
+            CollectionScreen {
+                seriesItem(0) {
+                    title {
+                        flakySafely(10_000) {
+                            assertIsDisplayed()
+                        }
+                        performClick()
+                    }
+                }
+            }
+        }
+        step("Ввод значения") {
+            val testValue = "2,5"
+            ItemScreen {
+                outlinedTextField {
+                    flakySafely(10_000) { assertIsDisplayed() }
+                    performTextReplacement(testValue)
+                }
+                closeKeyboard()
+                confirmButton {
+                    flakySafely(10_000) {
+                        assertIsDisplayed()
+                        assertTextEquals("Confirm")
+                    }
+                    performClick()
+                }
+            }
+        }
+        step("Проверка снекбара") {
+            // Проверка появления Snackbar с текстом - ждем пока появится текст
+            waitForText("Failed to update", 5000)
+            // Проверяем что Snackbar с текстом исчез
+            waitForTextNotExist("Failed to update", 5000)
+        }
+        step("Проверяем что мы остались на странице с блоком Прогресс") {
+            ItemScreen {
+                outlinedTextField {
+                    flakySafely(10_000) { assertIsDisplayed() }
+                }
+            }
+        }
+    }
+
+    @Test
+    @Regression
+    @Link(
+        name = "Тест-кейс",
+        url = "https://testrail.bcs.ru/testrail/index.php?/cases/view/60786872"
+    )
+    @DisplayName("Ввод некорректного значения (дробное через точку)")
+    fun enteringIncorrectValueFractionalSeparatedByPoint() = run {
+        scenario(Login(TEST_USER_1, composeTestRule))
+        step("Переход на детальную карточку") {
+            CollectionScreen {
+                seriesItem(0) {
+                    title {
+                        flakySafely(10_000) {
+                            assertIsDisplayed()
+                        }
+                        performClick()
+                    }
+                }
+            }
+        }
+        step("Ввод значения") {
+            val testValue = "2.5"
+            ItemScreen {
+                outlinedTextField {
+                    flakySafely(10_000) { assertIsDisplayed() }
+                    performTextReplacement(testValue)
+                }
+                closeKeyboard()
+                confirmButton {
+                    flakySafely(10_000) {
+                        assertIsDisplayed()
+                        assertTextEquals("Confirm")
+                    }
+                    performClick()
+                }
+            }
+        }
+        step("Проверка снекбара") {
+            // Проверка появления Snackbar с текстом - ждем пока появится текст
+            waitForText("Failed to update", 5000)
+            // Проверяем что Snackbar с текстом исчез
+            waitForTextNotExist("Failed to update", 5000)
+        }
+        step("Проверяем что мы остались на странице с блоком Прогресс") {
+            ItemScreen {
+                outlinedTextField {
+                    flakySafely(10_000) { assertIsDisplayed() }
+                }
+            }
+        }
+    }
+
+    @Test
+    @Regression
+    @Link(
+        name = "Тест-кейс",
+        url = "https://testrail.bcs.ru/testrail/index.php?/cases/view/60786872"
+    )
+    @DisplayName("Ввод некорректного значения (содержит буквы)")
+    fun enteringIncorrectValueContainsLetters() = run {
+        scenario(Login(TEST_USER_1, composeTestRule))
+        step("Переход на детальную карточку") {
+            CollectionScreen {
+                seriesItem(0) {
+                    title {
+                        flakySafely(10_000) {
+                            assertIsDisplayed()
+                        }
+                        performClick()
+                    }
+                }
+            }
+        }
+        step("Ввод значения") {
+            val testValue = "2qw"
+            ItemScreen {
+                outlinedTextField {
+                    flakySafely(10_000) { assertIsDisplayed() }
+                    performTextReplacement(testValue)
+                }
+                closeKeyboard()
+                confirmButton {
+                    flakySafely(10_000) {
+                        assertIsDisplayed()
+                        assertTextEquals("Confirm")
+                    }
+                    performClick()
+                }
+            }
+        }
+        step("Проверка снекбара") {
+            // Проверка появления Snackbar с текстом - ждем пока появится текст
+            waitForText("Failed to update", 5000)
+            // Проверяем что Snackbar с текстом исчез
+            waitForTextNotExist("Failed to update", 5000)
+        }
+        step("Проверяем что мы остались на странице с блоком Прогресс") {
+            ItemScreen {
+                outlinedTextField {
+                    flakySafely(10_000) { assertIsDisplayed() }
+                }
+            }
         }
     }
 }

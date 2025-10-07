@@ -19,6 +19,7 @@ class CollectionScreen(semanticsProvider: SemanticsNodeInteractionsProvider) :
     val filterButton: KNode = createNode(SeriesCollectionTags.MenuFilter)
     val sortButton: KNode = createNode(SeriesCollectionTags.MenuSort)
     val refreshButton: KNode = createNode(SeriesCollectionTags.MenuRefresh)
+    fun filterOptionChecked(testTag: String): KNode = createNode(testTag)
 
     fun searchFab(block: KExtendedFabNode.() -> Unit = {}): KExtendedFabNode {
         return createNodeByTestTag(
