@@ -14,6 +14,8 @@ import com.chesire.nekome.helpers.assertTextMatches
 import com.chesire.nekome.helpers.closeKeyboard
 import com.chesire.nekome.helpers.getText
 import com.chesire.nekome.helpers.scenario.Login
+import com.chesire.nekome.helpers.waitForText
+import com.chesire.nekome.helpers.assertTextDisplayed
 import com.kaspersky.kaspresso.annotations.Regression
 import dagger.hilt.android.testing.HiltAndroidTest
 import io.qameta.allure.kotlin.Epic
@@ -84,15 +86,9 @@ class ItemScreenProgressBlockTest : BaseComposeTest() {
                     performClick()
                 }
                 // Проверка появления Snackbar - ждем пока появится текст
-                composeTestRule.waitUntil(timeoutMillis = 5_000) {
-                    composeTestRule
-                        .onAllNodesWithText("Failed to update", substring = true, ignoreCase = true)
-                        .fetchSemanticsNodes().isNotEmpty()
-                }
+                composeTestRule.waitForText("Failed to update", 5_000)
                 // Проверяем, что Snackbar виден
-                composeTestRule.onNodeWithText("Failed to update", substring = true, ignoreCase = true).apply {
-                    assertIsDisplayed()
-                }
+                composeTestRule.assertTextDisplayed("Failed to update")
             }
         }
     }
@@ -147,15 +143,9 @@ class ItemScreenProgressBlockTest : BaseComposeTest() {
                     performClick()
                 }
                 // Проверка появления Snackbar - ждем пока появится текст
-                composeTestRule.waitUntil(timeoutMillis = 5_000) {
-                    composeTestRule
-                        .onAllNodesWithText("Failed to update", substring = true, ignoreCase = true)
-                        .fetchSemanticsNodes().isNotEmpty()
-                }
+                composeTestRule.waitForText("Failed to update")
                 // Проверяем, что Snackbar виден
-                composeTestRule.onNodeWithText("Failed to update", substring = true, ignoreCase = true).apply {
-                    assertIsDisplayed()
-                }
+                composeTestRule.assertTextDisplayed("Failed to update")
                 
                 // Ждем пока Snackbar исчезнет (SnackbarDuration.Short = ~4 секунды + анимация)
                 waitForTime(6_000)
@@ -164,8 +154,7 @@ class ItemScreenProgressBlockTest : BaseComposeTest() {
                 printFullSemanticTree()
                 
                 // Проверяем что Snackbar еще виден - этот assert должен упасть, потому что снэкбар уже исчез
-                composeTestRule.onNodeWithText("Failed to update", substring = true, ignoreCase = true)
-                    .assertIsDisplayed()
+                composeTestRule.assertTextDisplayed("Failed to update")
             }
         }
     }

@@ -4,6 +4,10 @@ import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.semantics.getOrNull
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.junit4.ComposeTestRule
+import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.assertIsDisplayed
 import io.github.kakaocup.compose.node.assertion.NodeAssertions
 import io.github.kakaocup.compose.node.element.KNode
 
@@ -57,4 +61,27 @@ fun KNode.getText(): String {
         // Игнорируем ошибки, нам нужен только текст
     }
     return result ?: "" // Возвращаем пустую строку, если текст null
+}
+
+/**
+ * Ожидает появления текста на экране в течение timeoutMillis.
+ */
+fun ComposeTestRule.waitForText(
+    text: String,
+    timeoutMillis: Long = 5_000
+) {
+    this.waitUntil(timeoutMillis = timeoutMillis) {
+        this.onAllNodesWithText(text, substring = true, ignoreCase = true)
+            .fetchSemanticsNodes().isNotEmpty()
+    }
+}
+
+/**
+ * Проверяет, что текст отображается на экране.
+ */
+fun ComposeTestRule.assertTextDisplayed(
+    text: String
+) {
+    this.onNodeWithText(text, substring = true, ignoreCase = true)
+        .assertIsDisplayed()
 }
