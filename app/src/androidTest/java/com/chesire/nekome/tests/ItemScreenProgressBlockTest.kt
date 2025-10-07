@@ -1,6 +1,10 @@
 package com.chesire.nekome.tests
 
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onChild
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.chesire.nekome.app.series.item.ui.ItemScreenTags
 import com.chesire.nekome.base.BaseComposeTest
@@ -79,22 +83,16 @@ class ItemScreenProgressBlockTest : BaseComposeTest() {
                     }
                     performClick()
                 }
-                // Проверка появления Snackbar
-
-                composeTestRule.onNodeWithTag(ItemScreenTags.Snackbar).apply {
-                    flakySafely(5_000) {
-                        assertIsDisplayed()
-//                        assertTextContains("Failed to update", substring = true)
-                    }
+                // Проверка появления Snackbar - ждем пока появится текст
+                composeTestRule.waitUntil(timeoutMillis = 5_000) {
+                    composeTestRule
+                        .onAllNodesWithText("Failed to update", substring = true, ignoreCase = true)
+                        .fetchSemanticsNodes().isNotEmpty()
                 }
-                printSemanticTreeByTag(ItemScreenTags.Snackbar)
-                printFullSemanticTree()
-//                composeTestRule.onNodeWithTag(ItemScreenTags.Snackbar).apply {
-//                    flakySafely(10_000) {
-//                        assertDoesNotExist() // Проверяем, что Snackbar исчез
-//                    }
-//                }
-
+                // Проверяем, что Snackbar виден
+                composeTestRule.onNodeWithText("Failed to update", substring = true, ignoreCase = true).apply {
+                    assertIsDisplayed()
+                }
             }
         }
     }
@@ -148,23 +146,26 @@ class ItemScreenProgressBlockTest : BaseComposeTest() {
                     }
                     performClick()
                 }
-                // Проверка появления Snackbar
-
-                composeTestRule.onNodeWithTag(ItemScreenTags.Snackbar).apply {
-                    flakySafely(5_000) {
-                        assertIsDisplayed()
-//                        assertTextContains("Failed to update", substring = true)
-                    }
+                // Проверка появления Snackbar - ждем пока появится текст
+                composeTestRule.waitUntil(timeoutMillis = 5_000) {
+                    composeTestRule
+                        .onAllNodesWithText("Failed to update", substring = true, ignoreCase = true)
+                        .fetchSemanticsNodes().isNotEmpty()
                 }
-                printSemanticTreeByTag(ItemScreenTags.Snackbar)
+                // Проверяем, что Snackbar виден
+                composeTestRule.onNodeWithText("Failed to update", substring = true, ignoreCase = true).apply {
+                    assertIsDisplayed()
+                }
+                
+                // Ждем пока Snackbar исчезнет (SnackbarDuration.Short = ~4 секунды + анимация)
+                waitForTime(6_000)
+                
+                // Выводим семантическое дерево для отладки  
                 printFullSemanticTree()
-                waitForTime(10_000)
-                composeTestRule.onNodeWithTag(ItemScreenTags.Snackbar).apply {
-                    flakySafely(5_000) {
-                        assertIsDisplayed()
-//                        assertTextContains("Failed to update", substring = true)
-                    }
-                }
+                
+                // Проверяем что Snackbar еще виден - этот assert должен упасть, потому что снэкбар уже исчез
+                composeTestRule.onNodeWithText("Failed to update", substring = true, ignoreCase = true)
+                    .assertIsDisplayed()
             }
         }
     }
