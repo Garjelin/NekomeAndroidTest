@@ -1,6 +1,10 @@
 package com.chesire.nekome.base
 
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.printToLog
 import androidx.test.core.app.ActivityScenario
@@ -145,6 +149,35 @@ abstract class BaseComposeTest : TestCase(
             seriesPreferences.reset()
         }
         authProvider.logout()
+    }
+
+    /**
+     * Ожидает появления текста на экране в течение timeoutMillis.
+     */
+    fun waitForText(
+        text: String,
+        timeoutMillis: Long
+    ) {
+        // Ждём, пока узлы с указанным текстом появятся в дереве
+        composeTestRule.waitUntil(timeoutMillis = timeoutMillis) {
+            composeTestRule.onAllNodesWithText(text, substring = true, ignoreCase = true)
+                .fetchSemanticsNodes().isNotEmpty()
+        }
+        composeTestRule.onNodeWithText(text, substring = true, ignoreCase = true)
+            .assertIsDisplayed()
+    }
+
+    fun waitForTextNotExist(
+        text: String,
+        timeoutMillis: Long
+    ) {
+        // Ждём, пока узлы с указанным текстом не исчезнут из дерева
+        composeTestRule.waitUntil(timeoutMillis = timeoutMillis) {
+            composeTestRule.onAllNodesWithText(text, substring = true, ignoreCase = true)
+                .fetchSemanticsNodes().isEmpty()
+        }
+        composeTestRule.onNodeWithText(text, substring = true, ignoreCase = true)
+            .assertDoesNotExist()
     }
 }
 

@@ -62,26 +62,3 @@ fun KNode.getText(): String {
     }
     return result ?: "" // Возвращаем пустую строку, если текст null
 }
-
-/**
- * Ожидает появления текста на экране в течение timeoutMillis.
- */
-fun ComposeTestRule.waitForText(
-    text: String,
-    timeoutMillis: Long = 5_000
-) {
-    this.waitUntil(timeoutMillis = timeoutMillis) {
-        this.onAllNodesWithText(text, substring = true, ignoreCase = true)
-            .fetchSemanticsNodes().isNotEmpty()
-    }
-}
-
-/**
- * Проверяет, что текст отображается на экране.
- */
-fun ComposeTestRule.assertTextDisplayed(
-    text: String
-) {
-    this.onNodeWithText(text, substring = true, ignoreCase = true)
-        .assertIsDisplayed()
-}
