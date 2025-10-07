@@ -167,6 +167,9 @@ abstract class BaseComposeTest : TestCase(
             .assertIsDisplayed()
     }
 
+    /**
+     * Ожидает отсутствия текста на экране в течение timeoutMillis.
+     */
     fun waitForTextNotExist(
         text: String,
         timeoutMillis: Long
