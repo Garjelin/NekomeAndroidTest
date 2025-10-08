@@ -4,6 +4,10 @@ import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.semantics.getOrNull
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.junit4.ComposeTestRule
+import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.assertIsDisplayed
 import io.github.kakaocup.compose.node.assertion.NodeAssertions
 import io.github.kakaocup.compose.node.element.KNode
 
@@ -19,13 +23,17 @@ import io.github.kakaocup.compose.node.element.KNode
 //
 //@param regex паттерн для проверки текста
 
-fun NodeAssertions.assertTextMatches(
-    regex: Regex
-) {
+fun NodeAssertions.assertTextMatches(regex: Regex) {
     val matcher = SemanticsMatcher("Text matches pattern '${regex.pattern}'") { node ->
+        // Проверяем EditableText для редактируемых полей
+        val editableText = node.config.getOrNull(SemanticsProperties.EditableText)
+        // Проверяем Text для обычных текстовых элементов
         val textValues = node.config.getOrNull(SemanticsProperties.Text)
-        val actualText = textValues?.joinToString("") { it.text } ?: ""
-        
+        val actualText = when {
+            editableText != null -> editableText
+            textValues != null -> textValues.joinToString("") { it.text }
+            else -> ""
+        }
         regex.matches(actualText)
     }
     assert(matcher)
@@ -57,4 +65,33 @@ fun KNode.getText(): String {
         // Игнорируем ошибки, нам нужен только текст
     }
     return result ?: "" // Возвращаем пустую строку, если текст null
+}
+
+/**
+ * Проверяет, что текст элемента не равен заданному значению.
+ *
+ * Пример использования:
+ * ```kotlin
+ * title {
+ *     assertIsDisplayed()
+ *     assertTextNoEquals("Old Title") // проверка, что текст не равен "Old Title"
+ * }
+ * ```
+ *
+ * @param text ожидаемое значение текста, которому элемент не должен соответствовать
+ */
+fun NodeAssertions.assertTextNoEquals(text: String) {
+    val matcher = SemanticsMatcher("Text is not equal to '$text'") { node ->
+        // Проверяем EditableText для редактируемых полей
+        val editableText = node.config.getOrNull(SemanticsProperties.EditableText)
+        // Проверяем Text для обычных текстовых элементов
+        val textValues = node.config.getOrNull(SemanticsProperties.Text)
+        val actualText = when {
+            editableText != null -> editableText
+            textValues != null -> textValues.joinToString("") { it.text }
+            else -> ""
+        }
+        actualText != text
+    }
+    assert(matcher)
 }

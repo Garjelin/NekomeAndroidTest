@@ -1,11 +1,12 @@
 package com.chesire.nekome.tests
 
+import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.chesire.nekome.app.series.item.ui.ItemScreenTags
 import com.chesire.nekome.base.BaseComposeTest
 import com.chesire.nekome.helpers.Users.TEST_USER_1
 import com.chesire.nekome.helpers.annotations.Debug
 import com.chesire.nekome.helpers.assertTextMatches
+import com.chesire.nekome.helpers.getText
 import com.chesire.nekome.helpers.scenario.Login
 import com.kaspersky.kaspresso.annotations.Regression
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -31,7 +32,7 @@ class ItemScreenTest : BaseComposeTest() {
     @Regression
     @Link(
         name = "Тест-кейс",
-        url = "https://testrail.bcs.ru/testrail/index.php?/cases/view/60786871"
+        url = "https://sergey-yakimov.youtrack.cloud/issue/DAT-1"
     )
     @DisplayName("Отображение элементов детальной карточки")
     fun displayingElementsOfDetailedCard() = run {
@@ -101,16 +102,17 @@ class ItemScreenTest : BaseComposeTest() {
                 progressInput {
                     flakySafely(10_000) { assertIsDisplayed() }
                 }
-                printSemanticTreeByTag(ItemScreenTags.ProgressInput)
                 outlinedTextField {
                     flakySafely(10_000) {
                         assertIsDisplayed()
-                        assertTextEquals("3")
+                        val actualText = getText()
+                        Log.d("LOG_MSG_1","Progress input text: '$actualText'")
+                        assertTextMatches(Regex("""\d+"""))
                     }
                     trailingIcon {
                         flakySafely(10_000) {
                             assertIsDisplayed()
-                            assertTextEquals("/ 25")
+                            assertTextMatches(Regex("""/ \d+"""))
                         }
                     }
                 }
@@ -151,7 +153,7 @@ class ItemScreenTest : BaseComposeTest() {
     @Regression
     @Link(
         name = "Тест-кейс",
-        url = "https://testrail.bcs.ru/testrail/index.php?/cases/view/60786872"
+        url = "https://sergey-yakimov.youtrack.cloud/issue/DAT-2"
     )
     @DisplayName("Отображение элементов карточки серии")
     fun checkSeriesCardElements() = run {

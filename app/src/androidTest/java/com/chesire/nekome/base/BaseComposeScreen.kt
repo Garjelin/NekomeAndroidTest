@@ -4,6 +4,7 @@ import androidx.compose.ui.test.SemanticsNodeInteractionsProvider
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onChildren
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.printToLog
 import com.chesire.nekome.helpers.kNodes.KExtendedFabNode
@@ -89,6 +90,9 @@ abstract class BaseComposeScreen<out T : ComposeScreen<T>>(
         node.apply(block)
         return node
     }
+
+    // Найти элемент по тексту
+    fun findElementByTitle(title: String) = provider.onNodeWithText(title, useUnmergedTree = true)
 
     // Функция для печати семантического дерева по тегу
     fun printSemanticTreeByTag(
