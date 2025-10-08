@@ -1,11 +1,5 @@
 package com.chesire.nekome.tests
 
-import android.util.Log
-import androidx.compose.ui.state.ToggleableState
-import androidx.compose.ui.test.assertIsOff
-import androidx.compose.ui.test.assertIsOn
-import androidx.compose.ui.test.onNodeWithTag
-import androidx.glance.semantics.SemanticsProperties
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.chesire.nekome.app.series.collection.ui.FilterTags
 import com.chesire.nekome.base.BaseComposeTest
@@ -14,7 +8,6 @@ import com.chesire.nekome.helpers.annotations.Debug
 import com.chesire.nekome.helpers.assertTextMatches
 import com.chesire.nekome.helpers.assertTextNoEquals
 import com.chesire.nekome.helpers.closeKeyboard
-import com.chesire.nekome.helpers.getCollectionSize
 import com.chesire.nekome.helpers.getText
 import com.chesire.nekome.helpers.scenario.Login
 import com.kaspersky.kaspresso.annotations.Regression
@@ -43,7 +36,7 @@ class CollectionScreenTest : BaseComposeTest() {
     @Regression
     @Link(
         name = "Тест-кейс",
-        url = "https://testrail.bcs.ru/testrail/index.php?/cases/view/60786871"
+        url = "https://sergey-yakimov.youtrack.cloud/issue/DAT-3"
     )
     @DisplayName("Отображение элементов страницы Anime")
     fun displayingAnimePageElements() = run {
@@ -132,7 +125,7 @@ class CollectionScreenTest : BaseComposeTest() {
     @Regression
     @Link(
         name = "Тест-кейс",
-        url = "https://testrail.bcs.ru/testrail/index.php?/cases/view/60786872"
+        url = "https://sergey-yakimov.youtrack.cloud/issue/DAT-4"
     )
     @DisplayName("Отображение элементов карточки")
     fun displayingCardElements() = run {
@@ -183,7 +176,7 @@ class CollectionScreenTest : BaseComposeTest() {
     @Regression
     @Link(
         name = "Тест-кейс",
-        url = "https://testrail.bcs.ru/testrail/index.php?/cases/view/60786873"
+        url = "https://sergey-yakimov.youtrack.cloud/issue/DAT-5"
     )
     @DisplayName("Переход на детальную карточку")
     fun displayingElementsOfDetailedCard() = run {
@@ -218,7 +211,51 @@ class CollectionScreenTest : BaseComposeTest() {
     @Regression
     @Link(
         name = "Тест-кейс",
-        url = "https://testrail.bcs.ru/testrail/index.php?/cases/view/60786872"
+        url = "https://sergey-yakimov.youtrack.cloud/issue/DAT-8"
+    )
+    @DisplayName("Возврат на страницу Anime")
+    fun backToAnimePage() = run {
+        scenario(Login(TEST_USER_1, composeTestRule))
+        step("Переход на детальную карточку") {
+            CollectionScreen {
+                seriesItem(0) {
+                    title {
+                        flakySafely(10_000) { assertIsDisplayed() }
+                        performClick()
+                    }
+                }
+            }
+            ItemScreen {
+                title {
+                    flakySafely(10_000) { assertIsDisplayed() }
+                }
+            }
+        }
+        step("Нажать на стрелку Назад") {
+            ItemScreen {
+                backButton {
+                    flakySafely(10_000) { assertIsDisplayed() }
+                    performClick()
+                }
+            }
+        }
+        step("Проверяем заголовок") {
+            CollectionScreen {
+                appBarTitle {
+                    flakySafely(10_000) {
+                        assertIsDisplayed()
+                        assertTextEquals("Anime")
+                    }
+                }
+            }
+        }
+    }
+
+    @Test
+    @Regression
+    @Link(
+        name = "Тест-кейс",
+        url = "https://sergey-yakimov.youtrack.cloud/issue/DAT-6"
     )
     @DisplayName("Увеличение счётчика прогресса")
     fun increasingProgressCounter() = run {
@@ -293,7 +330,7 @@ class CollectionScreenTest : BaseComposeTest() {
     @Regression
     @Link(
         name = "Тест-кейс",
-        url = "https://testrail.bcs.ru/testrail/index.php?/cases/view/60786872"
+        url = "https://sergey-yakimov.youtrack.cloud/issue/DAT-7"
     )
     @DisplayName("Карточка исчезает при достижении максимального прогресса")
     fun cardDisappearsWhenMaximumProgressIsReached() = run {
@@ -487,37 +524,6 @@ class CollectionScreenTest : BaseComposeTest() {
                     flakySafely(10_000) { assertIsDisplayed() }
                     performClick()
                 }
-            }
-        }
-    }
-
-    @Test
-    @Regression
-    @Link(
-        name = "Тест-кейс",
-        url = "https://testrail.bcs.ru/testrail/index.php?/cases/view/60786871"
-    )
-    @DisplayName("Отображение элементов страницы Anime")
-    fun displayingAnimePageElementsq() = run {
-        scenario(Login(TEST_USER_1, composeTestRule))
-        step("Проверка TopBar") {
-            CollectionScreen {
-                // Кнопка Filter
-                filterButton {
-                    flakySafely(10_000) { assertIsDisplayed() }
-                    performClick()
-                }
-                filterOptionChecked("FilterOptionChecked_Completed").apply {
-                    flakySafely(10_000) {
-                        assertIsDisplayed()
-                        assertIsOff()
-                    }
-                    performClick()
-                    flakySafely(10_000) { assertIsOn() }
-                }
-                waitForTime(3000)
-                printSemanticTreeByTag(FilterTags.Root)
-                // Кнопка Sort
             }
         }
     }

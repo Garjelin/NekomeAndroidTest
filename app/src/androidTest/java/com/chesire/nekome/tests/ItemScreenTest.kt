@@ -2,7 +2,6 @@ package com.chesire.nekome.tests
 
 import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.chesire.nekome.app.series.item.ui.ItemScreenTags
 import com.chesire.nekome.base.BaseComposeTest
 import com.chesire.nekome.helpers.Users.TEST_USER_1
 import com.chesire.nekome.helpers.annotations.Debug

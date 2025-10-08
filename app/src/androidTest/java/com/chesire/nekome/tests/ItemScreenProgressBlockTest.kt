@@ -32,7 +32,7 @@ class ItemScreenProgressBlockTest : BaseComposeTest() {
     @Regression
     @Link(
         name = "Тест-кейс",
-        url = "https://testrail.bcs.ru/testrail/index.php?/cases/view/60786872"
+        url = "https://sergey-yakimov.youtrack.cloud/issue/DAT-9"
     )
     @DisplayName("Ввод корректного значения")
     fun enteringCorrectValue() = run {
@@ -126,7 +126,7 @@ class ItemScreenProgressBlockTest : BaseComposeTest() {
     @Regression
     @Link(
         name = "Тест-кейс",
-        url = "https://testrail.bcs.ru/testrail/index.php?/cases/view/60786872"
+        url = "https://sergey-yakimov.youtrack.cloud/issue/DAT-10"
     )
     @DisplayName("Ввод некорректного значения (больше допустимого)")
     fun enteringIncorrectValueGreaterThanAllowedValue() = run {
@@ -195,7 +195,7 @@ class ItemScreenProgressBlockTest : BaseComposeTest() {
     @Regression
     @Link(
         name = "Тест-кейс",
-        url = "https://testrail.bcs.ru/testrail/index.php?/cases/view/60786872"
+        url = "https://sergey-yakimov.youtrack.cloud/issue/DAT-11"
     )
     @DisplayName("Ввод некорректного значения (отрицательное число)")
     fun enteringIncorrectValueNegativeNumber() = run {
@@ -248,7 +248,7 @@ class ItemScreenProgressBlockTest : BaseComposeTest() {
     @Regression
     @Link(
         name = "Тест-кейс",
-        url = "https://testrail.bcs.ru/testrail/index.php?/cases/view/60786872"
+        url = "https://sergey-yakimov.youtrack.cloud/issue/DAT-12"
     )
     @DisplayName("Ввод некорректного значения (дробное через запятую)")
     fun enteringIncorrectValueFractionalSeparatedByComma() = run {
@@ -301,7 +301,7 @@ class ItemScreenProgressBlockTest : BaseComposeTest() {
     @Regression
     @Link(
         name = "Тест-кейс",
-        url = "https://testrail.bcs.ru/testrail/index.php?/cases/view/60786872"
+        url = "https://sergey-yakimov.youtrack.cloud/issue/DAT-13"
     )
     @DisplayName("Ввод некорректного значения (дробное через точку)")
     fun enteringIncorrectValueFractionalSeparatedByPoint() = run {
@@ -354,7 +354,7 @@ class ItemScreenProgressBlockTest : BaseComposeTest() {
     @Regression
     @Link(
         name = "Тест-кейс",
-        url = "https://testrail.bcs.ru/testrail/index.php?/cases/view/60786872"
+        url = "https://sergey-yakimov.youtrack.cloud/issue/DAT-14"
     )
     @DisplayName("Ввод некорректного значения (содержит буквы)")
     fun enteringIncorrectValueContainsLetters() = run {
