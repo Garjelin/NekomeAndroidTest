@@ -23,9 +23,6 @@ build/
 .idea/misc.xml
 !.idea/runConfigurations/
 
-# Local configuration
-local.properties
-
 # Keystore files
 *.jks
 *.keystore
