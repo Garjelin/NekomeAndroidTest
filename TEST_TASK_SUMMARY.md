@@ -325,8 +325,8 @@ filteringConfiguration:
 @Link(name = "Тест-кейс", url = "https://sergey-yakimov.youtrack.cloud/issue/DAT-9")
 @DisplayName("Ввод корректного значения")
 ```
-![Скрин отчета Allure_1](/Users/admin/work/PET_PROJECTS/NekomeAndroidTest/Allure-report_screen_1.png)
-![Скрин отчета Allure_2](/Users/admin/work/PET_PROJECTS/NekomeAndroidTest/Allure-report_screen_2.png)
+![Скрин отчета Allure_1](Allure-report_screen_1.png)
+![Скрин отчета Allure_2](Allure-report_screen_2.png)
 
 ### 3. 📝 Документация тест-кейсов
 
