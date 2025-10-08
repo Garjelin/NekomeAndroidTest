@@ -80,6 +80,9 @@ Nekome is an Android application that helps with tracking your anime and manga w
    
    # UI tests (requires device/emulator)
    ./gradlew connectedDebugAndroidTest
+   
+   # Marathon tests with Allure reports (recommended)
+   ./run_marathon.sh
    ```
 
 5. **Install on device:**
@@ -108,6 +111,119 @@ nekome/
     ├── datasource/       # Data sources (auth, series, etc.)
     └── kitsu/            # Kitsu API integration
 ```
+
+## 🧪 Test Automation
+
+This project includes a comprehensive test automation framework built with **Kaspresso** and **Marathon**.
+
+### Quick Start
+
+```bash
+# Run all automated UI tests with Marathon
+./run_marathon.sh
+
+# Quick run (if Marathon already downloaded)
+./marathon_quick.sh
+
+# View Allure reports
+open marathon/html/index.html
+```
+
+### Test Coverage
+
+- ✅ **18 automated UI tests** covering critical user flows
+- ✅ **Login & Authentication** flows
+- ✅ **Series Collection** screen and navigation
+- ✅ **Series Cards** display and interaction
+- ✅ **Detail Screen** with all UI blocks
+- ✅ **Progress Block** with comprehensive validation testing
+- ✅ **Counter Increment** functionality
+- ✅ **Auto-hide** behavior on completion
+
+### Test Infrastructure
+
+**Framework & Tools:**
+- **Kaspresso 1.5.5** - UI testing framework
+- **Kakao Compose 0.4.3** - Compose testing DSL
+- **Marathon 0.6.5** - Parallel test execution
+- **Allure 2.4.0** - Test reporting
+- **Hilt** - Dependency injection for tests
+
+**Architecture:**
+- Page Object Pattern for maintainability
+- Scenario Pattern for reusable flows
+- Custom Compose Nodes for complex UI elements
+- Custom Assertions and Helpers
+- Full test isolation with automatic cleanup
+
+### Test Results
+
+Latest test run: **15/18 passed** (83.3% success rate)
+
+3 failed tests revealed real bugs in the Progress validation! 🐛
+
+For detailed documentation, see:
+- [Test Task Summary](TEST_TASK_SUMMARY.md) - Full implementation details
+- [Test Cases](docs/test-cases/) - Documented test scenarios
+- [Marathon Setup](FINAL_MARATHON_SUMMARY.md) - Marathon configuration
+
+### Running Tests
+
+#### Option 1: Marathon (Recommended)
+```bash
+./run_marathon.sh           # First run
+./marathon_quick.sh         # Subsequent runs
+```
+
+Results in `marathon/html/index.html`
+
+#### Option 2: Gradle
+```bash
+# All tests
+./gradlew connectedDebugAndroidTest
+
+# Specific test class
+./gradlew connectedDebugAndroidTest --tests "com.chesire.nekome.tests.CollectionScreenTest"
+
+# Single test
+./gradlew connectedDebugAndroidTest --tests "*.ItemScreenProgressBlockTest.enteringCorrectValue"
+```
+
+#### Option 3: Android Studio
+1. Open test file in `app/src/androidTest/`
+2. Click ▶️ next to test method
+3. Select device/emulator
+
+### Test Structure
+
+```
+app/src/androidTest/
+├── base/                      # Base test classes
+├── helpers/                   # Custom helpers & assertions
+│   ├── annotations/          # @Debug annotation
+│   ├── kNodes/              # Custom Compose Nodes
+│   └── scenario/            # Reusable scenarios
+├── pageobjects/              # Page Object classes
+│   ├── LoginScreen.kt
+│   ├── CollectionScreen.kt
+│   └── ItemScreen.kt
+└── tests/                    # Test implementations
+    ├── CollectionScreenTest.kt        (6 tests)
+    ├── ItemScreenTest.kt              (2 tests)
+    ├── ItemScreenProgressBlockTest.kt (7 tests)
+    └── LoginFlowComposeTest.kt        (3 tests)
+```
+
+### CI/CD Ready
+
+The test infrastructure is **ready for CI/CD integration**:
+- ✅ Isolated tests (no side effects)
+- ✅ Marathon for parallel execution
+- ✅ Allure reports generation
+- ✅ Automatic scripts
+- ✅ Test filtering by annotations
+
+Just add a CI configuration file (examples provided in TEST_TASK_SUMMARY.md)
 
 ### Code Quality
 
