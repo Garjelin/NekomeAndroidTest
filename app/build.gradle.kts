@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.google.dagger.hilt.android)
     alias(libs.plugins.google.devtools.ksp)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.compose.compiler)
     alias(libs.plugins.aboutlibraries)
 }
 
@@ -42,15 +43,25 @@ android {
         buildConfig = true
         compose = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
-    }
     testOptions {
         animationsDisabled = true
     }
     packaging {
-        resources.excludes.add("META-INF/*")
-        resources.excludes.add("MANIFEST.MF")
+        // Исключаем только конкретные файлы, НЕ трогая файлы версий Compose
+        resources.excludes.add("META-INF/AL2.0")
+        resources.excludes.add("META-INF/LGPL2.1")
+        resources.excludes.add("META-INF/DEPENDENCIES")
+        resources.excludes.add("META-INF/LICENSE")
+        resources.excludes.add("META-INF/LICENSE.txt")
+        resources.excludes.add("META-INF/LICENSE.md")
+        resources.excludes.add("META-INF/LICENSE-notice.md")
+        resources.excludes.add("META-INF/license.txt")
+        resources.excludes.add("META-INF/NOTICE")
+        resources.excludes.add("META-INF/NOTICE.txt")
+        resources.excludes.add("META-INF/notice.txt")
+        resources.excludes.add("META-INF/ASL2.0")
+        resources.excludes.add("META-INF/*.kotlin_module")
+        // НЕ исключаем META-INF/androidx.compose.*.version - они нужны для Layout Inspector!
     }
     lint {
         abortOnError = false
@@ -123,9 +134,25 @@ dependencies {
     testImplementation(libs.mockk)
 
     androidTestImplementation(project(":testing"))
+    
+    // Kaspresso + Kakao Compose для UI тестирования
+    androidTestImplementation("com.kaspersky.android-components:kaspresso:1.5.5")
+    androidTestImplementation("com.kaspersky.android-components:kaspresso-compose-support:1.5.5")
+    androidTestImplementation("io.github.kakaocup:compose:0.4.3")
+    
+    // Allure для красивых отчетов
+    androidTestImplementation("io.qameta.allure:allure-kotlin-model:2.4.0")
+    androidTestImplementation("io.qameta.allure:allure-kotlin-commons:2.4.0")
+    androidTestImplementation("io.qameta.allure:allure-kotlin-junit4:2.4.0")
+    androidTestImplementation("io.qameta.allure:allure-kotlin-android:2.4.0")
+    
+    // Compose Testing
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
+    
+    // Espresso + Testing infrastructure
     androidTestImplementation(libs.adevinta.barista)
     androidTestImplementation(libs.androidx.arch.core.testing)
-    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     androidTestImplementation(libs.androidx.test.espresso.core)
     androidTestImplementation(libs.androidx.test.espresso.intents)
     androidTestImplementation(libs.androidx.test.ext.junit)

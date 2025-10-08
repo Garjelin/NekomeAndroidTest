@@ -34,7 +34,7 @@ fun FilterDialog(
     if (filterDialog.show) {
         Render(
             filters = filterDialog.filterOptions,
-            onFilterResult = onFilterResult
+            onFilterResult = onFilterResult,
         )
     }
 }
@@ -73,7 +73,9 @@ private fun Render(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Checkbox(
-                            modifier = Modifier.semantics { testTag = FilterTags.OptionChecked },
+                            modifier = Modifier.semantics {
+                                testTag = "${FilterTags.OptionChecked}_${filter.userStatus.name}"
+                            },
                             checked = selectedFilters[filter.userStatus] == true,
                             onCheckedChange = { checkValue ->
                                 selectedFilters[filter.userStatus] = checkValue
@@ -84,7 +86,9 @@ private fun Render(
                             style = MaterialTheme.typography.bodyLarge,
                             modifier = Modifier
                                 .padding(start = 16.dp)
-                                .semantics { testTag = FilterTags.OptionText }
+                                .semantics {
+                                    testTag = "${FilterTags.OptionText}_${filter.userStatus.name}"
+                                }
                         )
                     }
                 }

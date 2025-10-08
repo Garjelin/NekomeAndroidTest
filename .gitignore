@@ -1,0 +1,174 @@
+# ============================================
+# Android / Gradle / IntelliJ
+# ============================================
+
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Android Studio / IntelliJ IDEA
+.idea/
+*.iml
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/gradle.xml
+.idea/assetWizardSettings.xml
+.idea/dictionaries
+.idea/libraries
+.idea/shelf
+.idea/caches/
+.idea/modules.xml
+.idea/navEditor.xml
+.idea/misc.xml
+!.idea/runConfigurations/
+
+# Local configuration
+local.properties
+
+# Keystore files
+*.jks
+*.keystore
+*.p12
+*.pem
+*.key
+
+# Android build outputs
+*.apk
+*.aab
+*.ap_
+*.dex
+*.class
+bin/
+gen/
+out/
+release/
+
+# Lint
+lint/
+lint-results*.xml
+lint-report.html
+
+# Captures
+captures/
+.externalNativeBuild
+
+# NDK
+obj/
+.cxx/
+
+# Google Services (if using Firebase)
+# google-services.json  # Раскомментируйте если используете Firebase
+
+# ============================================
+# OS specific
+# ============================================
+
+# MacOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Linux
+*~
+.directory
+.Trash-*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# ============================================
+# Version Control
+# ============================================
+
+# Git conflict backups
+*.orig
+*.rej
+
+# ============================================
+# Kotlin
+# ============================================
+
+# Compiled Kotlin
+*.kotlin_module
+
+# Kotlin compiler sessions (temporary files)
+.kotlin/
+
+# ============================================
+# Testing
+# ============================================
+
+# Test results
+test-results/
+androidTest-results/
+screenshots/
+reports/
+
+# Coverage
+*.exec
+jacoco/
+coverage/
+
+# ============================================
+# Other
+# ============================================
+
+# Log files
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# Archives
+*.zip
+*.tar
+*.gz
+*.rar
+*.7z
+
+# Debugging
+.debugger/
+
+# ============================================
+# Специфичные для проекта
+# ============================================
+
+# Документация сгенерированная (можно раскомментировать если нужна)
+# dokka/
+# javadoc/
+
+# Локальные скрипты разработки
+debug_*.sh
+test_local.sh
+
+# Временные файлы для отладки (раскомментируйте если создали для себя)
+# debug_notes.md
+# temp_*.md
+
+# ============================================
+# Marathon Test Runner
+# ============================================
+
+# Marathon binary и библиотеки (не нужны в репозитории)
+marathon-*/
+marathon*.zip
+
+# Результаты тестов Marathon
+marathon/
+
+# Сохраняем только конфигурацию и скрипты Marathon:
+# - Marathonfile.Local (конфигурация)
+# - run_marathon.sh (скрипт запуска)
+# - marathon_quick.sh (быстрый запуск)
+# - test_marathon.sh (проверка настройки)
+# - *.md файлы с документацией
+
