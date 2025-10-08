@@ -18,6 +18,7 @@
 **Задача:** Написать 5-10 автотестов для Android-приложения [Nekome](https://github.com/Chesire/Nekome)
 **Примечание**: Оригинальный код до выполнения задания был сохранен в ветке `original_main`.
 
+
 **Требования:**
 - ✅ Только Kotlin
 - ✅ Только Kaspresso (без Appium/Maestro/Espresso)
