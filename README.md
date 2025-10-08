@@ -131,7 +131,7 @@ open marathon/html/index.html
 
 ### Test Coverage
 
-- ✅ **18 automated UI tests** covering critical user flows
+- ✅ **14 automated UI tests** covering critical user flows
 - ✅ **Login & Authentication** flows
 - ✅ **Series Collection** screen and navigation
 - ✅ **Series Cards** display and interaction
@@ -158,7 +158,7 @@ open marathon/html/index.html
 
 ### Test Results
 
-Latest test run: **15/18 passed** (83.3% success rate)
+Latest test run: **11/14 passed** (78.6% success rate)
 
 3 failed tests revealed real bugs in the Progress validation! 🐛
 
@@ -210,8 +210,7 @@ app/src/androidTest/
 └── tests/                    # Test implementations
     ├── CollectionScreenTest.kt        (6 tests)
     ├── ItemScreenTest.kt              (2 tests)
-    ├── ItemScreenProgressBlockTest.kt (7 tests)
-    └── LoginFlowComposeTest.kt        (3 tests)
+    └── ItemScreenProgressBlockTest.kt (6 tests)
 ```
 
 ### CI/CD Ready
