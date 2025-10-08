@@ -33,7 +33,7 @@ class ItemScreenTest : BaseComposeTest() {
     @Regression
     @Link(
         name = "Тест-кейс",
-        url = "https://testrail.bcs.ru/testrail/index.php?/cases/view/60786871"
+        url = "https://sergey-yakimov.youtrack.cloud/issue/DAT-1"
     )
     @DisplayName("Отображение элементов детальной карточки")
     fun displayingElementsOfDetailedCard() = run {
@@ -154,7 +154,7 @@ class ItemScreenTest : BaseComposeTest() {
     @Regression
     @Link(
         name = "Тест-кейс",
-        url = "https://testrail.bcs.ru/testrail/index.php?/cases/view/60786872"
+        url = "https://sergey-yakimov.youtrack.cloud/issue/DAT-2"
     )
     @DisplayName("Отображение элементов карточки серии")
     fun checkSeriesCardElements() = run {

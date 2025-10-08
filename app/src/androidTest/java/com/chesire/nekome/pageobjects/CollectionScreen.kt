@@ -1,6 +1,8 @@
 package com.chesire.nekome.pageobjects
 
 import androidx.compose.ui.test.SemanticsNodeInteractionsProvider
+import androidx.compose.ui.test.onNodeWithText
+import com.chesire.nekome.app.series.collection.ui.FilterTags
 import com.chesire.nekome.app.series.collection.ui.SeriesCollectionTags
 import com.chesire.nekome.base.BaseComposeScreen
 import com.chesire.nekome.helpers.assertCollectionEmpty
@@ -20,6 +22,7 @@ class CollectionScreen(semanticsProvider: SemanticsNodeInteractionsProvider) :
     val sortButton: KNode = createNode(SeriesCollectionTags.MenuSort)
     val refreshButton: KNode = createNode(SeriesCollectionTags.MenuRefresh)
     fun filterOptionChecked(testTag: String): KNode = createNode(testTag)
+    val filterOkButton: KNode = createNode(FilterTags.OkButton)
 
     fun searchFab(block: KExtendedFabNode.() -> Unit = {}): KExtendedFabNode {
         return createNodeByTestTag(

@@ -1,5 +1,6 @@
 package com.chesire.nekome.tests
 
+import android.util.Log
 import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsOn
@@ -11,7 +12,9 @@ import com.chesire.nekome.base.BaseComposeTest
 import com.chesire.nekome.helpers.Users.TEST_USER_1
 import com.chesire.nekome.helpers.annotations.Debug
 import com.chesire.nekome.helpers.assertTextMatches
+import com.chesire.nekome.helpers.assertTextNoEquals
 import com.chesire.nekome.helpers.closeKeyboard
+import com.chesire.nekome.helpers.getCollectionSize
 import com.chesire.nekome.helpers.getText
 import com.chesire.nekome.helpers.scenario.Login
 import com.kaspersky.kaspresso.annotations.Regression
@@ -22,6 +25,7 @@ import io.qameta.allure.kotlin.Link
 import io.qameta.allure.kotlin.Owner
 import io.qameta.allure.kotlin.Story
 import io.qameta.allure.kotlin.junit4.DisplayName
+import junit.framework.TestCase.fail
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -35,10 +39,12 @@ import org.junit.runner.RunWith
 class CollectionScreenTest : BaseComposeTest() {
 
 
-
     @Test
     @Regression
-    @Link(name = "Тест-кейс", url = "https://testrail.bcs.ru/testrail/index.php?/cases/view/60786871")
+    @Link(
+        name = "Тест-кейс",
+        url = "https://testrail.bcs.ru/testrail/index.php?/cases/view/60786871"
+    )
     @DisplayName("Отображение элементов страницы Anime")
     fun displayingAnimePageElements() = run {
         scenario(Login(TEST_USER_1, composeTestRule))
@@ -124,7 +130,10 @@ class CollectionScreenTest : BaseComposeTest() {
 
     @Test
     @Regression
-    @Link(name = "Тест-кейс", url = "https://testrail.bcs.ru/testrail/index.php?/cases/view/60786872")
+    @Link(
+        name = "Тест-кейс",
+        url = "https://testrail.bcs.ru/testrail/index.php?/cases/view/60786872"
+    )
     @DisplayName("Отображение элементов карточки")
     fun displayingCardElements() = run {
         scenario(Login(TEST_USER_1, composeTestRule))
@@ -207,7 +216,10 @@ class CollectionScreenTest : BaseComposeTest() {
 
     @Test
     @Regression
-    @Link(name = "Тест-кейс", url = "https://testrail.bcs.ru/testrail/index.php?/cases/view/60786872")
+    @Link(
+        name = "Тест-кейс",
+        url = "https://testrail.bcs.ru/testrail/index.php?/cases/view/60786872"
+    )
     @DisplayName("Увеличение счётчика прогресса")
     fun increasingProgressCounter() = run {
         scenario(Login(TEST_USER_1, composeTestRule))
@@ -279,14 +291,23 @@ class CollectionScreenTest : BaseComposeTest() {
 
     @Test
     @Regression
-    @Link(name = "Тест-кейс", url = "https://testrail.bcs.ru/testrail/index.php?/cases/view/60786872")
+    @Link(
+        name = "Тест-кейс",
+        url = "https://testrail.bcs.ru/testrail/index.php?/cases/view/60786872"
+    )
     @DisplayName("Карточка исчезает при достижении максимального прогресса")
     fun cardDisappearsWhenMaximumProgressIsReached() = run {
         scenario(Login(TEST_USER_1, composeTestRule))
         var progressValue: Pair<Int, Int>? = null
+        var seriesTitle = ""
+        var containerSize = 0
         step("Сохранить значения Прогресса") {
             CollectionScreen {
                 seriesItem(0) {
+                    title {
+                        flakySafely(10_000) { assertIsDisplayed() }
+                        seriesTitle = getText()
+                    }
                     var progressValueText = ""
                     progress {
                         flakySafely(10_000) {
@@ -341,6 +362,10 @@ class CollectionScreenTest : BaseComposeTest() {
         }
         step("Нажать на кнопку '+1'") {
             CollectionScreen {
+                seriesCollection.container {
+                    flakySafely(10_000) { assertIsDisplayed() }
+                }
+                containerSize = seriesCollection.getSize()
                 seriesItem(0) {
                     // Иконка +1
                     plusOneButton {
@@ -350,18 +375,77 @@ class CollectionScreenTest : BaseComposeTest() {
                 }
             }
         }
-        waitForTime(10_000)
-        step("Возврат в исходное состояние") {
+        step("Проверить, что карточка с заголовком исчезла") {
             CollectionScreen {
-                seriesItem(0) {
-                    title {
+                seriesCollection.container {
+                    flakySafely(10_000) { assertIsDisplayed() }
+                }
+                flakySafely(10_000) {
+                    seriesCollection.assertSize(containerSize - 1)
+                }
+                for (index in 0 until seriesCollection.getSize()) {
+                    seriesItem(index) {
+                        title {
+                            flakySafely(10_000) {
+                                assertIsDisplayed()
+                                assertTextNoEquals(seriesTitle)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        step("Возврат в исходное состояние") {
+            step("Добавляем в фильтр Завершенные") {
+                CollectionScreen {
+                    filterButton {
+                        flakySafely(10_000) { assertIsDisplayed() }
+                        performClick()
+                    }
+                    filterOptionChecked("FilterOptionChecked_Completed").apply {
                         flakySafely(10_000) {
                             assertIsDisplayed()
+                            assertIsOff()
                         }
+                        performClick()
+                        flakySafely(10_000) { assertIsOn() }
+                    }
+                    filterOkButton {
+                        flakySafely(10_000) { assertIsDisplayed() }
                         performClick()
                     }
                 }
             }
+            step("Ищем позицию с целевым названием и кликаем") {
+                CollectionScreen {
+                    seriesCollection.container {
+                        flakySafely(10_000) { assertIsDisplayed() }
+                    }
+                    var targetIndex = -1
+                    var currentTitle = ""
+                    for (index in 0 until seriesCollection.getSize()) {
+                        seriesItem(index) {
+                            title {
+                                flakySafely(10_000) {
+                                    assertIsDisplayed()
+                                    currentTitle = getText()
+
+                                }
+                            }
+                        }
+                        if (currentTitle == seriesTitle) {
+                            targetIndex = index
+                            break
+                        }
+                    }
+                    if (targetIndex == -1) fail("Item with title '$seriesTitle' is not found")
+                    seriesItem(targetIndex) {
+                        title.performClick()
+                    }
+                }
+            }
+        }
+        step("Устанавливаем изначальное значение") {
             ItemScreen {
                 outlinedTextField {
                     flakySafely(10_000) { assertIsDisplayed() }
@@ -376,6 +460,8 @@ class CollectionScreenTest : BaseComposeTest() {
                     performClick()
                 }
             }
+        }
+        step("Проверяем что начальные значения установлены и убираем фильтр Завершенные") {
             CollectionScreen {
                 seriesItem(0) {
                     progress {
@@ -385,13 +471,32 @@ class CollectionScreenTest : BaseComposeTest() {
                         }
                     }
                 }
+                filterButton {
+                    flakySafely(10_000) { assertIsDisplayed() }
+                    performClick()
+                }
+                filterOptionChecked("FilterOptionChecked_Completed").apply {
+                    flakySafely(10_000) {
+                        assertIsDisplayed()
+                        assertIsOn()
+                    }
+                    performClick()
+                    flakySafely(10_000) { assertIsOff() }
+                }
+                filterOkButton {
+                    flakySafely(10_000) { assertIsDisplayed() }
+                    performClick()
+                }
             }
         }
     }
 
     @Test
     @Regression
-    @Link(name = "Тест-кейс", url = "https://testrail.bcs.ru/testrail/index.php?/cases/view/60786871")
+    @Link(
+        name = "Тест-кейс",
+        url = "https://testrail.bcs.ru/testrail/index.php?/cases/view/60786871"
+    )
     @DisplayName("Отображение элементов страницы Anime")
     fun displayingAnimePageElementsq() = run {
         scenario(Login(TEST_USER_1, composeTestRule))

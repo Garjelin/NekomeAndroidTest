@@ -66,3 +66,32 @@ fun KNode.getText(): String {
     }
     return result ?: "" // Возвращаем пустую строку, если текст null
 }
+
+/**
+ * Проверяет, что текст элемента не равен заданному значению.
+ *
+ * Пример использования:
+ * ```kotlin
+ * title {
+ *     assertIsDisplayed()
+ *     assertTextNoEquals("Old Title") // проверка, что текст не равен "Old Title"
+ * }
+ * ```
+ *
+ * @param text ожидаемое значение текста, которому элемент не должен соответствовать
+ */
+fun NodeAssertions.assertTextNoEquals(text: String) {
+    val matcher = SemanticsMatcher("Text is not equal to '$text'") { node ->
+        // Проверяем EditableText для редактируемых полей
+        val editableText = node.config.getOrNull(SemanticsProperties.EditableText)
+        // Проверяем Text для обычных текстовых элементов
+        val textValues = node.config.getOrNull(SemanticsProperties.Text)
+        val actualText = when {
+            editableText != null -> editableText
+            textValues != null -> textValues.joinToString("") { it.text }
+            else -> ""
+        }
+        actualText != text
+    }
+    assert(matcher)
+}
