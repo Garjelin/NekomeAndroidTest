@@ -325,6 +325,7 @@ filteringConfiguration:
 @Link(name = "Тест-кейс", url = "https://sergey-yakimov.youtrack.cloud/issue/DAT-9")
 @DisplayName("Ввод корректного значения")
 ```
+![Скрин отчета Allure](https://github.com/Chesire/Nekome/workflows/Master/badge.svg)
 
 ### 3. 📝 Документация тест-кейсов
 
