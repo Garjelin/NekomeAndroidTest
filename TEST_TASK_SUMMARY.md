@@ -235,10 +235,10 @@ class MyTest : BaseComposeTest()
 |---------|----------|-----------|--------|-----------|
 | [DAT-9](https://sergey-yakimov.youtrack.cloud/issue/DAT-9) | Ввод корректного значения | ⭐⭐⭐⭐ | ✅ | PASS |
 | [DAT-10](https://sergey-yakimov.youtrack.cloud/issue/DAT-10) | Значение > допустимого | ⭐⭐⭐⭐ | ✅ | PASS |
-| [DAT-11](https://sergey-yakimov.youtrack.cloud/issue/DAT-11) | Отрицательное число | ⭐⭐⭐ | ✅ | **FAIL** ❌ |
+| [DAT-11](https://sergey-yakimov.youtrack.cloud/issue/DAT-11) | Отрицательное число | ⭐⭐⭐ | ✅ | PASS |
 | [DAT-12](https://sergey-yakimov.youtrack.cloud/issue/DAT-12) | Дробное через запятую | ⭐⭐⭐ | ✅ | **FAIL** ❌ |
 | [DAT-13](https://sergey-yakimov.youtrack.cloud/issue/DAT-13) | Дробное через точку | ⭐⭐⭐ | ✅ | **FAIL** ❌ |
-| [DAT-14](https://sergey-yakimov.youtrack.cloud/issue/DAT-14) | Содержит буквы | ⭐⭐⭐ | ✅ | PASS |
+| [DAT-14](https://sergey-yakimov.youtrack.cloud/issue/DAT-14) | Содержит буквы | ⭐⭐⭐ | ✅ | **FAIL** ❌ |
 
 **Примечание:** 3 упавших теста выявили реальные баги в валидации поля прогресса! См. раздел "Найденные баги"
 
@@ -452,23 +452,23 @@ Duration:       ~3 minutes
 ```
 
 #### ❌ Failed Tests (3) - Найденные баги!
-1. **enteringIncorrectValueNegativeNumber** 
-   - Ожидалось: ошибка валидации
-   - Фактически: принято значение '0'
-   - **БАГ в валидации!**
-   - **Ссылка:** [DAT-11](https://sergey-yakimov.youtrack.cloud/issue/DAT-11)
-
-2. **enteringIncorrectValueFractionalSeparatedByComma**
+1. **enteringIncorrectValueFractionalSeparatedByComma**
    - Ожидалось: ошибка валидации
    - Фактически: принято значение '0'
    - **БАГ в валидации!**
    - **Ссылка:** [DAT-12](https://sergey-yakimov.youtrack.cloud/issue/DAT-12)
 
-3. **enteringIncorrectValueFractionalSeparatedByPoint**
+2. **enteringIncorrectValueFractionalSeparatedByPoint**
    - Ожидалось: ошибка валидации
    - Фактически: принято значение '0'
    - **БАГ в валидации!**
    - **Ссылка:** [DAT-13](https://sergey-yakimov.youtrack.cloud/issue/DAT-13)
+
+3. **enteringIncorrectValueContainsLetters** 
+   - Ожидалось: ошибка валидации
+   - Фактически: принято значение '0'
+   - **БАГ в валидации!**
+   - **Ссылка:** [DAT-14](https://sergey-yakimov.youtrack.cloud/issue/DAT-14)
 
 Полный HTML отчет (доступен после установки и запуска marathon): `marathon/html/index.html`
 
